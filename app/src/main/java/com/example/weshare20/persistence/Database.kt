@@ -2,32 +2,44 @@ package com.example.weshare20.persistence
 
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.PreparedStatement
 import java.sql.SQLException
 
 class Database {
-    fun connect() {
-        // Define the database URL, username, and password
-        // postgres://kjcoebww:9UjWwwxCx2jwqrX2RI0Ga2bOygVawfCc@trumpet.db.elephantsql.com/kjcoebww
-        val url = "jdbc:postgres://trumpet.db.elephantsql.com/kjcoebww"
-        val username = "kjcoebww"
-        val password = "9UjWwwxCx2jwqrX2RI0Ga2bOygVawfCc"
+    private val url = "jdbc:postgresql://trumpet.db.elephantsql.com/kjcoebww"
+    private val username = "kjcoebww"
+    private val password = "9UjWwwxCx2jwqrX2RI0Ga2bOygVawfCc"
 
-        // Attempt to establish a database connection
+    private fun connect(): Connection? {
         try {
-            // Register the JDBC driver (This step may be optional for some databases)
             Class.forName("org.postgresql.Driver")
-
-            // Open a connection to the database
-            val connection: Connection = DriverManager.getConnection(url, username, password)
-
-            // Now you have a connection to the database
-
-            // Perform database operations here
-
-            // Don't forget to close the connection when you're done
-            connection.close()
+            return DriverManager.getConnection(url, username, password)
         } catch (e: SQLException) {
             e.printStackTrace()
         }
+        return null
+    }
+
+    fun insertUser(userId: Int, fullName: String, username: String, password: String, email: String): Boolean {
+        val connection = connect()
+        if (connection != null) {
+            try {
+                val query = "INSERT INTO users (user_id, fullname, username, password, email) VALUES (?, ?, ?, ?, ?)"
+                val preparedStatement: PreparedStatement = connection.prepareStatement(query)
+                preparedStatement.setInt(1, userId)
+                preparedStatement.setString(2, fullName)
+                preparedStatement.setString(3, username)
+                preparedStatement.setString(4, password)
+                preparedStatement.setString(5, email)
+
+                val rowsInserted = preparedStatement.executeUpdate()
+                return rowsInserted > 0
+            } catch (e: SQLException) {
+                e.printStackTrace()
+            } finally {
+                connection.close()
+            }
+        }
+        return false
     }
 }
