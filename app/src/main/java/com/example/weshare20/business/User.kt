@@ -1,14 +1,12 @@
 package com.example.weshare20.business;
 class User() {
-    var userId: Int = 0
     var fullName: String = ""
     var userName: String = ""
     var password: String = ""
     var email: String = ""
 
     // Constructor
-    constructor(userId: Int, fullName: String, userName: String, password: String, email: String) : this() {
-        this.userId = userId
+    constructor(fullName: String, userName: String, password: String, email: String) : this() {
         this.fullName = fullName
         this.userName = userName
         this.password = password
@@ -16,10 +14,6 @@ class User() {
     }
 
     // Getters
-    fun getUserId(): Int {
-        return userId
-    }
-
     fun getFullName(): String {
         return fullName
     }
@@ -37,10 +31,6 @@ class User() {
     }
 
     // Setters
-    fun setUserId(userId: Int) {
-        this.userId = userId
-    }
-
     fun setFullName(fullName: String) {
         this.fullName = fullName
     }
