@@ -13,6 +13,11 @@ dependencyResolutionManagement {
     }
 }
 
+<<<<<<< HEAD
 rootProject.name = "test"
 include(":app")
  
+=======
+rootProject.name = "WeShare2.0"
+include(":app")
+>>>>>>> database/database

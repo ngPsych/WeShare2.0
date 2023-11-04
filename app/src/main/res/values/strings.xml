@@ -1,3 +1,7 @@
 <resources>
+<<<<<<< HEAD
     <string name="app_name">test</string>
+=======
+    <string name="app_name">WeShare2.0</string>
+>>>>>>> database/database
 </resources>
