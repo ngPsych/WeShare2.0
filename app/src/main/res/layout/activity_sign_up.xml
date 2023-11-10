@@ -1,38 +1,36 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.presentation.LoginActivity"
     android:orientation="vertical"
-    >
+    android:padding="16dp">
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/signupUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Username"
-        android:inputType="text" />
+        android:inputType="textPersonName"/>
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/signupEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"/>
+
+    <EditText
+        android:id="@+id/signupPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
         android:inputType="textPassword"/>
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/signupButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"/>
-
-    <TextView
-        android:id="@+id/link_signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Not a member? Sign up now"
-        android:textColor="@color/link_color"
-        android:layout_marginTop="16dp"
-        android:textSize="16sp"/>
+        android:text="Sign Up"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"/>
 </LinearLayout>
