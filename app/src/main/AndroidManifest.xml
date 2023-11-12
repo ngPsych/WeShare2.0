@@ -12,17 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Login"
         tools:targetApi="31">
-
+        <activity
+            android:name="com.example.presentation.Home"
+            android:exported="false" />
+        <activity
+            android:name="com.example.presentation.SignUpActivity"
+            android:exported="false" />
         <activity
             android:name="com.example.presentation.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
     </application>
 
 </manifest>

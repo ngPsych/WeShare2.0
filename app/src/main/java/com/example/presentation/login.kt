@@ -1,5 +1,6 @@
 package com.example.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -17,6 +18,7 @@ class LoginActivity : AppCompatActivity() {
         val passwordEditText: EditText = findViewById(R.id.password)
         val loginButton: Button = findViewById(R.id.loginButton)
 
+
         loginButton.setOnClickListener {
             val username = usernameEditText.text.toString()
             val password = passwordEditText.text.toString()
@@ -24,6 +26,15 @@ class LoginActivity : AppCompatActivity() {
             println("$username" )
             println("$password" )
             // Add your login logic here
+            val intent = Intent(this,Home::class.java)
+            startActivity(intent)
+
+        }
+        val signupButton = findViewById<Button>(R.id.signupButton)
+        signupButton.setOnClickListener {
+            val intent = Intent(this,SignUpActivity::class.java)
+            startActivity(intent)
         }
     }
+
 }
