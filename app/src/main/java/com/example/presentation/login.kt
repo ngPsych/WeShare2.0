@@ -18,6 +18,7 @@ class LoginActivity : AppCompatActivity() {
         val usernameEditText: EditText = findViewById(R.id.username)
         val passwordEditText: EditText = findViewById(R.id.password)
         val loginButton: Button = findViewById(R.id.loginButton)
+        val signUpLink: TextView = findViewById(R.id.link_signup)
 
         loginButton.setOnClickListener {
             val username = usernameEditText.text.toString()
@@ -26,14 +27,15 @@ class LoginActivity : AppCompatActivity() {
             // call db check if user exists
             println("$username" )
             println("$password" )
+            println("CHANGE")
 
-            val signUpLink: TextView = findViewById(R.id.link_signup)
-            signUpLink.setOnClickListener {
-                val intent = Intent(this, signUp::class.java)
-                startActivity(intent)
-            }
+
 
             // Add your login logic here
+        }
+        signUpLink.setOnClickListener {
+            val intent = Intent(this, signUp::class.java)
+            startActivity(intent)
         }
     }
 }

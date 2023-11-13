@@ -25,9 +25,20 @@ class signUp : AppCompatActivity() {
             val password = passwordEditText.text.toString()
             // Implement your sign-up logic here
 
-
+// Kalder DB
             val databaseConnector = Database()
-            databaseConnector.insertUser(fullName, username, email, password)
+            val connection = databaseConnector.connect()
+
+            if (connection != null) {
+                // Insert user
+                println("Connection established")
+                // id skal sendes til DB apparently
+                databaseConnector.insertUser(3,fullName, username, email, password)
+
+                // Close the database connection
+                connection.close()
+            }
+
         }
     }
 }
