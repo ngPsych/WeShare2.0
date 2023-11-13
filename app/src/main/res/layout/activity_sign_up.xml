@@ -4,16 +4,25 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.presentation.SignUpActivity">
+    tools:context=".presentation.SignUpActivity">
 
+    <EditText
+        android:id="@+id/editTextFullname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:hint="Full name"
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/editTextUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextFullname"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
         android:hint="Username"
-        android:inputType="text"
-        android:layout_marginBottom="16dp"/>
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/editTextEmail"
