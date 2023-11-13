@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.SignUpActivity">
+    tools:context="com.example.weshare20.presentation.SignUpActivity">
 
     <EditText
         android:id="@+id/editTextFullname"
