@@ -8,11 +8,12 @@ import com.example.weshare20.R
 import com.example.weshare20.business.SessionManager
 
 class Home : AppCompatActivity() {
-    private val session = SessionManager(this)
-    private val db = DatabaseHandler(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        val session = SessionManager(this)
+        val db = DatabaseHandler(this)
 
         val userId = session.getUserId()
 

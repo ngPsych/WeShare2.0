@@ -11,7 +11,6 @@ import com.example.weshare20.business.User
 import com.example.weshare20.R
 
 class SignUpActivity : AppCompatActivity() {
-    private val db = DatabaseHandler(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
@@ -22,6 +21,8 @@ class SignUpActivity : AppCompatActivity() {
         val editTextPassword: EditText = findViewById(R.id.editTextPassword)
         val editTextPhoneNumber: EditText = findViewById(R.id.editTextPhoneNumber)
         val editTextEmail: EditText = findViewById(R.id.editTextEmail)
+
+        val db = DatabaseHandler(this)
 
         btnSignUp.setOnClickListener {
             // Logic for inserting into database
