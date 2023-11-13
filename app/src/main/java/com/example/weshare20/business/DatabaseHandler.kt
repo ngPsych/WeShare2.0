@@ -3,11 +3,12 @@ package com.example.weshare20.business
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.weshare20.business.User
 
-class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0_Database", null, 1) {
+class DatabaseHandler(context: Context) : SQLiteOpenHelper(context, "WeShare2.0_Database", null, 1) {
+
     override fun onCreate(db: SQLiteDatabase?) {
         val createUsersTableQuery = """
             CREATE TABLE Users (
@@ -24,128 +25,114 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
-        // drops the table if it already exists? might not be necessary
-        //db?.execSQL("DROP TABLE IF EXISTS Users")
-        //onCreate(db)
+        // You might want to handle database schema upgrades here
     }
 
     fun createUser(user: User) {
-        val db = this.writableDatabase
-        val values = ContentValues().apply {
-            put("fullname", user.fullname)
-            put("username", user.username)
-            put("password", user.password)
-            put("phoneNumber", user.phoneNumber)
-            put("email", user.email)
+        writableDatabase.use { db ->
+            val values = ContentValues().apply {
+                put("fullname", user.fullname)
+                put("username", user.username)
+                put("password", user.password)
+                put("phoneNumber", user.phoneNumber)
+                put("email", user.email)
+            }
+
+            db.insert("Users", null, values)
         }
-
-        db?.insert("Users", null, values)
-
-        db?.close()
     }
 
     @SuppressLint("Range")
     fun authenticateUser(username: String, password: String): Int? {
-        val db = this.readableDatabase
-        var userId: Int? = null
+        return readableDatabase.use { db ->
+            var userId: Int? = null
 
-        val query = "SELECT userID FROM Users WHERE username = ? AND password = ?"
-        val cursor = db.rawQuery(query, arrayOf(username, password))
+            val query = "SELECT userID FROM Users WHERE username = ? AND password = ?"
+            val cursor = db.rawQuery(query, arrayOf(username, password))
 
-        if (cursor.moveToFirst()) {
-            userId = cursor.getInt(cursor.getColumnIndex("userID"))
+            if (cursor.moveToFirst()) {
+                userId = cursor.getInt(cursor.getColumnIndex("userID"))
+            }
+
+            cursor.close()
+            userId
         }
-
-        cursor.close()
-        db.close()
-
-        return userId
     }
 
-    // This functions gets UserInfo through searching the userID (used for session)
     @SuppressLint("Range")
     fun getUserInfo(userId: Int): User? {
-        val db = this.readableDatabase
-        var user: User? = null
+        return readableDatabase.use { db ->
+            var user: User? = null
 
-        val query = "SELECT * FROM Users WHERE userID = ?"
-        val cursor = db.rawQuery(query, arrayOf(userId.toString()))
+            val query = "SELECT * FROM Users WHERE userID = ?"
+            val cursor = db.rawQuery(query, arrayOf(userId.toString()))
 
-        if (cursor.moveToFirst()) {
-            val fullname = cursor.getString(cursor.getColumnIndex("fullname"))
-            val username = cursor.getString(cursor.getColumnIndex("username"))
-            val password = cursor.getString(cursor.getColumnIndex("password"))
-            val phoneNumber = cursor.getInt(cursor.getColumnIndex("phoneNumber"))
-            val email = cursor.getString(cursor.getColumnIndex("email"))
+            if (cursor.moveToFirst()) {
+                user = getUserFromCursor(cursor)
+            }
 
-            user = User(fullname, username, password, phoneNumber, email)
+            cursor.close()
+            user
         }
-
-        cursor.close()
-        db.close()
-
-        return user
     }
 
-    // Will be used for later when searching for user through username to add into group
     @SuppressLint("Range")
     fun getUsernameInfo(username: String): User? {
-        val db = this.readableDatabase
-        var user: User? = null
+        return readableDatabase.use { db ->
+            var user: User? = null
 
-        val query = "SELECT * FROM Users WHERE username = ?"
-        val cursor = db.rawQuery(query, arrayOf(username.toString()))
+            val query = "SELECT * FROM Users WHERE username = ?"
+            val cursor = db.rawQuery(query, arrayOf(username.toString()))
 
-        if (cursor.moveToFirst()) {
-            val fullname = cursor.getString(cursor.getColumnIndex("fullname"))
-            val username = cursor.getString(cursor.getColumnIndex("username"))
-            val password = cursor.getString(cursor.getColumnIndex("password"))
-            val phoneNumber = cursor.getInt(cursor.getColumnIndex("phoneNumber"))
-            val email = cursor.getString(cursor.getColumnIndex("email"))
+            if (cursor.moveToFirst()) {
+                user = getUserFromCursor(cursor)
+            }
 
-            user = User(fullname, username, password, phoneNumber, email)
+            cursor.close()
+            user
         }
-
-        cursor.close()
-        db.close()
-
-        return user
     }
 
     fun isUsernameExists(username: String): Boolean {
-        val db = this.readableDatabase
-        var isExists = false
+        return readableDatabase.use { db ->
+            var isExists = false
 
-        val query = "SELECT * FROM Users WHERE username = ?"
-        val cursor = db.rawQuery(query, arrayOf(username))
+            val query = "SELECT * FROM Users WHERE username = ?"
+            val cursor = db.rawQuery(query, arrayOf(username))
 
-        if (cursor.moveToFirst()) {
-            // Username exists
-            isExists = true
+            if (cursor.moveToFirst()) {
+                isExists = true
+            }
+
+            cursor.close()
+            isExists
         }
-
-        cursor.close()
-        db.close()
-
-        return isExists
     }
 
     fun isEmailExist(email: String): Boolean {
-        val db = this.readableDatabase
-        var isExists = false
+        return readableDatabase.use { db ->
+            var isExists = false
 
-        val query = "SELECT * FROM Users WHERE email = ?"
-        val cursor = db.rawQuery(query, arrayOf(email))
+            val query = "SELECT * FROM Users WHERE email = ?"
+            val cursor = db.rawQuery(query, arrayOf(email))
 
-        if (cursor.moveToFirst()) {
-            // email exists
-            isExists = true
+            if (cursor.moveToFirst()) {
+                isExists = true
+            }
+
+            cursor.close()
+            isExists
         }
-
-        cursor.close()
-        db.close()
-
-        return isExists
     }
 
+    @SuppressLint("Range")
+    private fun getUserFromCursor(cursor: Cursor): User {
+        val fullname = cursor.getString(cursor.getColumnIndex("fullname"))
+        val username = cursor.getString(cursor.getColumnIndex("username"))
+        val password = cursor.getString(cursor.getColumnIndex("password"))
+        val phoneNumber = cursor.getInt(cursor.getColumnIndex("phoneNumber"))
+        val email = cursor.getString(cursor.getColumnIndex("email"))
+
+        return User(fullname, username, password, phoneNumber, email)
+    }
 }
