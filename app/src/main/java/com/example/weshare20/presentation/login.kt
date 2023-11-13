@@ -22,6 +22,8 @@ class LoginActivity : AppCompatActivity() {
         val db = DatabaseHandler(this)
         val session = SessionManager(this)
 
+        db.deleteDatabase(this)
+
         loginButton.setOnClickListener {
             val username = usernameEditText.text.toString()
             val password = passwordEditText.text.toString()

@@ -148,4 +148,8 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         return isExists
     }
 
+    fun deleteDatabase(context: Context) {
+        context.deleteDatabase("WeShare2.0_Database")
+    }
+
 }
