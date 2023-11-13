@@ -11,7 +11,8 @@ import com.example.weshare20.business.DatabaseHandler
 import com.example.weshare20.business.SessionManager
 
 class LoginActivity : AppCompatActivity() {
-
+    private val db = DatabaseHandler(this)
+    private val session = SessionManager(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -19,9 +20,6 @@ class LoginActivity : AppCompatActivity() {
         val usernameEditText: EditText = findViewById(R.id.username)
         val passwordEditText: EditText = findViewById(R.id.password)
         val loginButton: Button = findViewById(R.id.loginButton)
-        val db = DatabaseHandler(this)
-        val session = SessionManager(this)
-
 
         loginButton.setOnClickListener {
             val username = usernameEditText.text.toString()
