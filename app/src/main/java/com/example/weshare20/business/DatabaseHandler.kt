@@ -60,6 +60,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         return userId
     }
 
+    // This functions gets UserInfo through searching the userID (used for session)
     @SuppressLint("Range")
     fun getUserInfo(userId: Int): User? {
         val db = this.readableDatabase
@@ -83,5 +84,28 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         return user
     }
 
+    // Will be used for later when searching for user through username to add into group
+    @SuppressLint("Range")
+    fun getUsernameInfo(username: String): User? {
+        val db = this.readableDatabase
+        var user: User? = null
+
+        val query = "SELECT * FROM Users WHERE username = ?"
+        val cursor = db.rawQuery(query, arrayOf(username.toString()))
+
+        if (cursor.moveToFirst()) {
+            val fullname = cursor.getString(cursor.getColumnIndex("fullname"))
+            val username = cursor.getString(cursor.getColumnIndex("username"))
+            val password = cursor.getString(cursor.getColumnIndex("password"))
+            val email = cursor.getString(cursor.getColumnIndex("email"))
+
+            user = User(fullname, username, password, email)
+        }
+
+        cursor.close()
+        db.close()
+
+        return user
+    }
 
 }

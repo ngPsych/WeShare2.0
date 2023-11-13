@@ -14,6 +14,7 @@ class SessionManager(context: Context) {
         return sharedPreferences.getInt("userId", -1)
     }
 
+    // Use clearSession when user logs out
     fun clearSession() {
         sharedPreferences.edit().clear().apply()
     }
