@@ -13,13 +13,13 @@
         android:theme="@style/Theme.Login"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.Home"
+            android:name="com.example.weshare20.presentation.Home"
             android:exported="false" />
         <activity
-            android:name=".presentation.SignUpActivity"
+            android:name="com.example.weshare20.presentation.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.LoginActivity"
+            android:name="com.example.weshare20.presentation.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
