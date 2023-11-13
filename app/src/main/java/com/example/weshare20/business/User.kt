@@ -4,5 +4,6 @@ data class User(
     val fullname: String,
     val username: String,
     val password: String,
+    val phoneNumber: Int,
     val email: String
 )

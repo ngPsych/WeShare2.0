@@ -25,22 +25,32 @@
         android:inputType="text" />
 
     <EditText
-        android:id="@+id/editTextEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:layout_below="@+id/editTextUsername"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"/>
-
-    <EditText
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
         android:inputType="textPassword"
-        android:layout_below="@+id/editTextEmail"
+        android:layout_below="@+id/editTextUsername"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"/>
+
+    <EditText
+        android:id="@+id/editTextPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:layout_below="@+id/editTextPassword"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"/>
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:layout_below="@+id/editTextPhoneNumber"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"/>
 
@@ -49,7 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign Up"
-        android:layout_below="@+id/editTextPassword"
+        android:layout_below="@+id/editTextEmail"
         android:layout_marginTop="16dp"/>
 
 </RelativeLayout>

@@ -19,6 +19,7 @@ class SignUpActivity : AppCompatActivity() {
         val editTextFullname: EditText = findViewById(R.id.editTextFullname)
         val editTextUsername: EditText = findViewById(R.id.editTextUsername)
         val editTextPassword: EditText = findViewById(R.id.editTextPassword)
+        val editTextPhoneNumber: EditText = findViewById(R.id.editTextPhoneNumber)
         val editTextEmail: EditText = findViewById(R.id.editTextEmail)
 
         val db = DatabaseHandler(this)
@@ -28,6 +29,7 @@ class SignUpActivity : AppCompatActivity() {
             val fullName = editTextFullname.text.toString()
             val username = editTextUsername.text.toString()
             val password = editTextPassword.text.toString()
+            val phoneNumber = editTextPhoneNumber.text.toString().toInt()
             val email = editTextEmail.text.toString()
 
             val usernameResult = db.isUsernameExists(username)
@@ -43,7 +45,7 @@ class SignUpActivity : AppCompatActivity() {
                     Toast.makeText(this, "Email already exists", Toast.LENGTH_LONG).show()
                 }
                 else -> {
-                    db.createUser(User(fullName, username, password, email))
+                    db.createUser(User(fullName, username, password, phoneNumber, email))
 
                     Toast.makeText(this, "Account created!", Toast.LENGTH_LONG).show()
 

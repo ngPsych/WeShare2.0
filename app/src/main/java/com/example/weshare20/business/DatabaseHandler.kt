@@ -15,6 +15,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
                 fullname TEXT,
                 username TEXT,
                 password TEXT,
+                phoneNumber INTEGER,
                 email TEXT
             );
         """
@@ -34,6 +35,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
             put("fullname", user.fullname)
             put("username", user.username)
             put("password", user.password)
+            put("phoneNumber", user.phoneNumber)
             put("email", user.email)
         }
 
@@ -73,9 +75,10 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
             val fullname = cursor.getString(cursor.getColumnIndex("fullname"))
             val username = cursor.getString(cursor.getColumnIndex("username"))
             val password = cursor.getString(cursor.getColumnIndex("password"))
+            val phoneNumber = cursor.getInt(cursor.getColumnIndex("phoneNumber"))
             val email = cursor.getString(cursor.getColumnIndex("email"))
 
-            user = User(fullname, username, password, email)
+            user = User(fullname, username, password, phoneNumber, email)
         }
 
         cursor.close()
@@ -97,9 +100,10 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
             val fullname = cursor.getString(cursor.getColumnIndex("fullname"))
             val username = cursor.getString(cursor.getColumnIndex("username"))
             val password = cursor.getString(cursor.getColumnIndex("password"))
+            val phoneNumber = cursor.getInt(cursor.getColumnIndex("phoneNumber"))
             val email = cursor.getString(cursor.getColumnIndex("email"))
 
-            user = User(fullname, username, password, email)
+            user = User(fullname, username, password, phoneNumber, email)
         }
 
         cursor.close()
