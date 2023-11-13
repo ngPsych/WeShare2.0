@@ -108,4 +108,40 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         return user
     }
 
+    fun isUsernameExists(username: String): Boolean {
+        val db = this.readableDatabase
+        var isExists = false
+
+        val query = "SELECT * FROM Users WHERE username = ?"
+        val cursor = db.rawQuery(query, arrayOf(username))
+
+        if (cursor.moveToFirst()) {
+            // Username exists
+            isExists = true
+        }
+
+        cursor.close()
+        db.close()
+
+        return isExists
+    }
+
+    fun isEmailExist(email: String): Boolean {
+        val db = this.readableDatabase
+        var isExists = false
+
+        val query = "SELECT * FROM Users WHERE email = ?"
+        val cursor = db.rawQuery(query, arrayOf(email))
+
+        if (cursor.moveToFirst()) {
+            // email exists
+            isExists = true
+        }
+
+        cursor.close()
+        db.close()
+
+        return isExists
+    }
+
 }

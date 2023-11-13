@@ -21,21 +21,37 @@ class SignUpActivity : AppCompatActivity() {
         val editTextPassword: EditText = findViewById(R.id.editTextPassword)
         val editTextEmail: EditText = findViewById(R.id.editTextEmail)
 
+        val db = DatabaseHandler(this)
+
         btnSignUp.setOnClickListener {
             // Logic for inserting into database
-            val db = DatabaseHandler(this)
-
             val fullName = editTextFullname.text.toString()
             val username = editTextUsername.text.toString()
             val password = editTextPassword.text.toString()
             val email = editTextEmail.text.toString()
 
-            db.createUser(User(fullName, username, password, email))
+            val usernameResult = db.isUsernameExists(username)
+            val emailResult = db.isEmailExist(email)
 
-            Toast.makeText(this, "Account created!", Toast.LENGTH_LONG).show()
+            when {
+                usernameResult -> {
+                    // Username already exists
+                    Toast.makeText(this, "Username already exists", Toast.LENGTH_LONG).show()
+                }
+                emailResult -> {
+                    // Email already exists
+                    Toast.makeText(this, "Email already exists", Toast.LENGTH_LONG).show()
+                }
+                else -> {
+                    db.createUser(User(fullName, username, password, email))
 
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+                    Toast.makeText(this, "Account created!", Toast.LENGTH_LONG).show()
+
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
         }
     }
 }
