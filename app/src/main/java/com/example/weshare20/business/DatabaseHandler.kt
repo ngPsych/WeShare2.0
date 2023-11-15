@@ -5,7 +5,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.weshare20.business.User
 
 class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0_Database", null, 1) {
     override fun onCreate(db: SQLiteDatabase?) {
@@ -20,7 +19,26 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
             );
         """
 
+        val createGroupsTableQuery = """
+    CREATE TABLE Groups (
+        groupID INTEGER PRIMARY KEY AUTOINCREMENT,
+        groupName TEXT,
+        description TEXT
+    );
+"""
+
+        val createUserGroupTableQuery = """
+    CREATE TABLE UserGroups (
+        userID INTEGER,
+        groupID INTEGER,
+        FOREIGN KEY(userID) REFERENCES Users(userID),
+        FOREIGN KEY(groupID) REFERENCES Groups(groupID),
+        PRIMARY KEY(userID, groupID)
+    );
+"""
         db?.execSQL(createUsersTableQuery)
+        db?.execSQL(createGroupsTableQuery)
+        db?.execSQL(createUserGroupTableQuery)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -151,5 +169,88 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
     fun deleteDatabase(context: Context) {
         context.deleteDatabase("WeShare2.0_Database")
     }
+
+    fun createGroup(group: Group) {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put("groupName", group.name)
+            put("description", group.description)
+        }
+
+        db?.insert("Groups", null, values)
+        db?.close()
+    }
+
+    fun addUserToGroup(userID: Int, groupID: Int) {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put("userID", userID)
+            put("groupID", groupID)
+        }
+
+        db?.insert("UserGroups", null, values)
+        db?.close()
+    }
+
+    fun removeUserFromGroup(userID: Int, groupID: Int) {
+        val db = this.writableDatabase
+        db?.delete("UserGroups", "userID=? AND groupID=?", arrayOf(userID.toString(), groupID.toString()))
+        db?.close()
+    }
+
+    @SuppressLint("Range")
+    fun getUserGroups(userID: Int): List<Group> {
+        val groups = mutableListOf<Group>()
+        val db = this.readableDatabase
+        val selectQuery = """
+        SELECT g.groupID, g.groupName, g.description 
+        FROM Groups g 
+        INNER JOIN UserGroups ug ON g.groupID = ug.groupID 
+        WHERE ug.userID = ?
+    """
+        val cursor = db.rawQuery(selectQuery, arrayOf(userID.toString()))
+
+        if (cursor.moveToFirst()) {
+            do {
+                val groupID = cursor.getInt(cursor.getColumnIndex("groupID"))
+                val groupName = cursor.getString(cursor.getColumnIndex("groupName"))
+                val description = cursor.getString(cursor.getColumnIndex("description"))
+                groups.add(Group(groupID, groupName, description))
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return groups
+    }
+
+    @SuppressLint("Range")
+    fun getGroupUsers(groupID: Int): List<User> {
+        val users = mutableListOf<User>()
+        val db = this.readableDatabase
+        val selectQuery = """
+        SELECT u.userID, u.fullname, u.username, u.password, u.phoneNumber, u.email 
+        FROM Users u 
+        INNER JOIN UserGroups ug ON u.userID = ug.userID 
+        WHERE ug.groupID = ?
+    """
+        val cursor = db.rawQuery(selectQuery, arrayOf(groupID.toString()))
+
+        if (cursor.moveToFirst()) {
+            do {
+                val fullname = cursor.getString(cursor.getColumnIndex("fullname"))
+                val username = cursor.getString(cursor.getColumnIndex("username"))
+                val password = cursor.getString(cursor.getColumnIndex("password"))
+                val phoneNumber = cursor.getInt(cursor.getColumnIndex("phoneNumber"))
+                val email = cursor.getString(cursor.getColumnIndex("email"))
+                users.add(User(fullname, username, password, phoneNumber, email))
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return users
+    }
+
 
 }
