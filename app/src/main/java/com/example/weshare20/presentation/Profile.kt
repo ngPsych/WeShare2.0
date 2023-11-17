@@ -20,7 +20,7 @@ class Profile : AppCompatActivity() {
         val db = DatabaseHandler(this)
         val userId = session.getUserId()
 
-        val profileUsername: TextView = findViewById(R.id.profileFullName)
+        val profileFullName: TextView = findViewById(R.id.profileFullName)
         val profileNotificationSwitch: Switch = findViewById(R.id.profileNotificationSwitch)
         val profilePhoneNumber: EditText = findViewById(R.id.profilePhoneNumber)
         val profileEmail: EditText = findViewById(R.id.profileEmail)
@@ -28,42 +28,43 @@ class Profile : AppCompatActivity() {
         val profileConfirmPassword: EditText = findViewById(R.id.profileConfirmPassword)
         val profileUpdateButton: Button = findViewById(R.id.profileUpdateButton)
 
-        profilePhoneNumber.hint = "New hint text"
-
         if (userId != -1) {
             val user = db.getUserInfo(userId)
 
             if (user != null) {
                 val fullName = user.fullname
                 val username = user.username
+                val phoneNumber = user.phoneNumber
                 val email = user.email
 
-                profileUsername.text = fullName
-                profilePhoneNumber.hint = username
+                profileFullName.text = fullName
+                profilePhoneNumber.hint = phoneNumber.toString()
                 profileEmail.hint = email
 
                 profileUpdateButton.setOnClickListener {
                     // Check and update phone number
-                    try {
-                        val newPhoneNumber = profilePhoneNumber.text.toString().toInt()
+                    val newPhoneNumber = profilePhoneNumber.text.toString().toInt()
+                    if (newPhoneNumber != newPhoneNumber) {
                         if (user.phoneNumber != newPhoneNumber && !db.isPhoneNumberExist(newPhoneNumber)) {
                             db.updateUserPhoneNumber(userId, newPhoneNumber)
                             Toast.makeText(this, "Phone number updated.", Toast.LENGTH_SHORT).show()
                         } else if (db.isPhoneNumberExist(newPhoneNumber)) {
                             Toast.makeText(this, "PHONE NUMBER ALREADY EXISTS", Toast.LENGTH_LONG).show()
                         }
-                    } catch (e: NumberFormatException) {
-                        Toast.makeText(this, "Invalid phone number.", Toast.LENGTH_SHORT).show()
                     }
+
 
                     // Check and update email
                     val newEmail = profileEmail.text.toString()
-                    if (user.email != newEmail && !db.isEmailExist(newEmail)) {
-                        db.updateUserEmail(userId, newEmail)
-                        Toast.makeText(this, "Email updated.", Toast.LENGTH_SHORT).show()
-                    } else if (db.isEmailExist(newEmail)) {
-                        Toast.makeText(this, "E-MAIL ALREADY EXISTS", Toast.LENGTH_LONG).show()
+                    if (newEmail != newEmail) {
+                        if (user.email != newEmail && !db.isEmailExist(newEmail)) {
+                            db.updateUserEmail(userId, newEmail)
+                            Toast.makeText(this, "Email updated.", Toast.LENGTH_SHORT).show()
+                        } else if (db.isEmailExist(newEmail)) {
+                            Toast.makeText(this, "E-MAIL ALREADY EXISTS", Toast.LENGTH_LONG).show()
+                        }
                     }
+
 
                     // Check and update password
                     val newPassword = profilePassword.text.toString()
