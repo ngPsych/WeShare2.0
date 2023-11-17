@@ -42,9 +42,10 @@ class Profile : AppCompatActivity() {
 
                 profileUpdateButton.setOnClickListener {
                     // Check and update phone number
-                    val newPhoneNumber = profilePhoneNumber.text.toString().toInt()
+
                    // if (profilePhoneNumber.hint.toString() != profilePhoneNumber.text.toString()) {
                     if (profilePhoneNumber.text.isNotEmpty()) {
+                        val newPhoneNumber = profilePhoneNumber.text.toString().toInt()
                         if (user.phoneNumber != newPhoneNumber && !db.isPhoneNumberExist(newPhoneNumber)) {
                             db.updateUserPhoneNumber(userId, newPhoneNumber)
                             Toast.makeText(this, "Phone number updated.", Toast.LENGTH_SHORT).show()

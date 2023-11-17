@@ -25,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
 
         val deleteDBButton: Button = findViewById(R.id.deleteDBButton)
 
-        val usernameResult = db.isUsernameExists("gg")
+        val usernameResult = db.isUsernameExists("rr")
         val emailResult = db.isEmailExist("jens@jensen.com")
 
         when {
