@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
                 println("email already exist")
             }
             else -> {
-                db.createUser(User("Jens Jensen", "gg", "1234", 80808080, "jens@jensen.com"))
+                db.createUser(User("Jens Jensen", "rr", "1234", 80808080, "jens@jensen.com"))
             }
         }
 
