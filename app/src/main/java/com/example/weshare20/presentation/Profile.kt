@@ -33,7 +33,6 @@ class Profile : AppCompatActivity() {
 
             if (user != null) {
                 val fullName = user.fullname
-                val username = user.username
                 val phoneNumber = user.phoneNumber
                 val email = user.email
 
@@ -44,7 +43,7 @@ class Profile : AppCompatActivity() {
                 profileUpdateButton.setOnClickListener {
                     // Check and update phone number
                     val newPhoneNumber = profilePhoneNumber.text.toString().toInt()
-                    if (profilePhoneNumber.text.toString() != profilePhoneNumber.text.toString()) {
+                    if (profilePhoneNumber.hint.toString() != profilePhoneNumber.text.toString()) {
                         if (user.phoneNumber != newPhoneNumber && !db.isPhoneNumberExist(newPhoneNumber)) {
                             db.updateUserPhoneNumber(userId, newPhoneNumber)
                             Toast.makeText(this, "Phone number updated.", Toast.LENGTH_SHORT).show()
@@ -53,10 +52,9 @@ class Profile : AppCompatActivity() {
                         }
                     }
 
-
                     // Check and update email
-/*                    val newEmail = profileEmail.text.toString()
-                    if (profileEmail.text != profileEmail.text) {
+                    val newEmail = profileEmail.text.toString()
+                    if (profileEmail.hint != profileEmail.text) {
                         if (user.email != newEmail && !db.isEmailExist(newEmail)) {
                             db.updateUserEmail(userId, newEmail)
                             Toast.makeText(this, "Email updated.", Toast.LENGTH_SHORT).show()
@@ -64,7 +62,6 @@ class Profile : AppCompatActivity() {
                             Toast.makeText(this, "E-MAIL ALREADY EXISTS", Toast.LENGTH_LONG).show()
                         }
                     }
-
 
                     // Check and update password
                     val newPassword = profilePassword.text.toString()
@@ -76,7 +73,7 @@ class Profile : AppCompatActivity() {
                         } else {
                             Toast.makeText(this, "Passwords do not match.", Toast.LENGTH_SHORT).show()
                         }
-                    }*/
+                    }
                 }
 
 
@@ -89,9 +86,6 @@ class Profile : AppCompatActivity() {
                         Toast.makeText(this, "NOTIFICATION OFF", Toast.LENGTH_LONG).show()
                     }
                 }
-
-                // If you want to set the switch based on a certain condition:
-                profileNotificationSwitch.isChecked = true // or false
             }
         }
 

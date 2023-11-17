@@ -22,7 +22,7 @@
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="120dp"
             tools:layout_editor_absoluteY="93dp"
-            tools:srcCompat="@drawable/profilepic" />
+            tools:src="@drawable/profilepic" />
 
         <TextView
             android:id="@+id/profileFullName"
@@ -39,6 +39,7 @@
             android:text="Notification"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:checked="true"
             tools:ignore="MissingConstraints" />
 
         <EditText
