@@ -44,7 +44,7 @@ class Profile : AppCompatActivity() {
                 profileUpdateButton.setOnClickListener {
                     // Check and update phone number
                     val newPhoneNumber = profilePhoneNumber.text.toString().toInt()
-                    if (newPhoneNumber != newPhoneNumber) {
+                    if (profilePhoneNumber.text.toString() != profilePhoneNumber.text.toString()) {
                         if (user.phoneNumber != newPhoneNumber && !db.isPhoneNumberExist(newPhoneNumber)) {
                             db.updateUserPhoneNumber(userId, newPhoneNumber)
                             Toast.makeText(this, "Phone number updated.", Toast.LENGTH_SHORT).show()
@@ -55,8 +55,8 @@ class Profile : AppCompatActivity() {
 
 
                     // Check and update email
-                    val newEmail = profileEmail.text.toString()
-                    if (newEmail != newEmail) {
+/*                    val newEmail = profileEmail.text.toString()
+                    if (profileEmail.text != profileEmail.text) {
                         if (user.email != newEmail && !db.isEmailExist(newEmail)) {
                             db.updateUserEmail(userId, newEmail)
                             Toast.makeText(this, "Email updated.", Toast.LENGTH_SHORT).show()
@@ -76,7 +76,7 @@ class Profile : AppCompatActivity() {
                         } else {
                             Toast.makeText(this, "Passwords do not match.", Toast.LENGTH_SHORT).show()
                         }
-                    }
+                    }*/
                 }
 
 
