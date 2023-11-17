@@ -32,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
             println("$password" )
             // Add your login logic here
             val userId = db.authenticateUser(username, password)
+            print(userId)
 
             if (userId != null) {
                 // Authentication successful

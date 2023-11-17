@@ -28,7 +28,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="end"
-            android:src="@tools:sample/avatars" />
+            android:src="@drawable/profilepic" />
 
         <!-- Add other header elements as needed -->
 
