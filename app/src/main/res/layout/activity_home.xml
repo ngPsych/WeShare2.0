@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.weshare20.presentation.SignUpActivity">
 
 
@@ -11,19 +12,28 @@
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="16dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="WeShare"
             android:textSize="24sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/homeProfilePic"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end"
+            android:src="@tools:sample/avatars" />
 
         <!-- Add other header elements as needed -->
 
     </LinearLayout>
+
 
     <!-- File List -->
     <ListView
@@ -40,9 +50,11 @@
         android:id="@+id/fabAddFile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        />
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:tint="@android:color/white" />
+
 
 </RelativeLayout>

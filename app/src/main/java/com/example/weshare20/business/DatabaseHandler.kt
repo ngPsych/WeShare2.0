@@ -166,10 +166,53 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         return isExists
     }
 
-    fun deleteDatabase(context: Context) {
-        context.deleteDatabase("WeShare2.0_Database")
+    fun isPhoneNumberExist(phoneNumber: Int): Boolean {
+        val db = this.readableDatabase
+        var isExists = false
+
+        val query = "SELECT * FROM Users WHERE phoneNumber = ?"
+        val cursor = db.rawQuery(query, arrayOf(phoneNumber.toString()))
+
+        if (cursor.moveToFirst()) {
+            isExists = true
+        }
+
+        cursor.close()
+        db.close()
+
+        return isExists
     }
 
+
+    // ----- Profile (Update) ----- //
+    fun updateUserPhoneNumber(userId: Int, newPhoneNumber: Int) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put("phoneNumber", newPhoneNumber)
+
+        db.update("Users", values, "userID = ?", arrayOf(userId.toString()))
+        db.close()
+    }
+
+    fun updateUserEmail(userId: Int, newEmail: String) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put("email", newEmail)
+
+        db.update("Users", values, "userID = ?", arrayOf(userId.toString()))
+        db.close()
+    }
+
+    fun updateUserPassword(userId: Int, newPassword: String) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put("password", newPassword)
+
+        db.update("Users", values, "userID = ?", arrayOf(userId.toString()))
+        db.close()
+    }
+
+    // ----- Group ----- //
     fun createGroup(group: Group) {
         val db = this.writableDatabase
         val values = ContentValues().apply {
@@ -252,5 +295,8 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         return users
     }
 
+    fun deleteDatabase(context: Context) {
+        context.deleteDatabase("WeShare2.0_Database")
+    }
 
 }

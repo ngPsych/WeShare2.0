@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.Profile">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="171dp"
+        android:layout_height="172dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="120dp"
+        tools:layout_editor_absoluteY="93dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <LinearLayout
+        android:layout_width="411dp"
+        android:layout_height="467dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="-1dp"
+        tools:layout_editor_absoluteY="265dp">
+
+        <TextView
+            android:id="@+id/profileFullName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20sp"
+            android:text="FULL NAME"
+            android:textSize="24sp" />
+
+        <Switch
+            android:id="@+id/profileNotificationSwitch"
+            android:layout_width="162dp"
+            android:layout_height="51dp"
+            android:text="Notification"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/profilePhoneNumber"
+            android:layout_width="252dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_horizontal"
+            android:hint="PHONE NUMBER"
+            android:inputType="text"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/profileEmail"
+            android:layout_width="252dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_horizontal"
+            android:hint="E-MAIL"
+            android:inputType="text"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/profilePassword"
+            android:layout_width="252dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_horizontal"
+            android:hint="PASSWORD"
+            android:inputType="textPassword"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/profileConfirmPassword"
+            android:layout_width="252dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_horizontal"
+            android:hint="CONFIRM PASSWORD"
+            android:inputType="textPassword"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/profileUpdateButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="UPDATE" />
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
