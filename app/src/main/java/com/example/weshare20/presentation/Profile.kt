@@ -43,24 +43,30 @@ class Profile : AppCompatActivity() {
                 profileUpdateButton.setOnClickListener {
                     // Check and update phone number
                     val newPhoneNumber = profilePhoneNumber.text.toString().toInt()
-                    if (profilePhoneNumber.hint.toString() != profilePhoneNumber.text.toString()) {
+                   // if (profilePhoneNumber.hint.toString() != profilePhoneNumber.text.toString()) {
+                    if (profilePhoneNumber.text.isNotEmpty()) {
                         if (user.phoneNumber != newPhoneNumber && !db.isPhoneNumberExist(newPhoneNumber)) {
                             db.updateUserPhoneNumber(userId, newPhoneNumber)
                             Toast.makeText(this, "Phone number updated.", Toast.LENGTH_SHORT).show()
                         } else if (db.isPhoneNumberExist(newPhoneNumber)) {
                             Toast.makeText(this, "PHONE NUMBER ALREADY EXISTS", Toast.LENGTH_LONG).show()
                         }
+                    } else {
+                        println("PHONE NUMBER: Empty")
                     }
 
                     // Check and update email
                     val newEmail = profileEmail.text.toString()
-                    if (profileEmail.hint != profileEmail.text) {
+                   // if (profileEmail.hint != profileEmail.text) {
+                    if (profileEmail.text.isNotEmpty()) {
                         if (user.email != newEmail && !db.isEmailExist(newEmail)) {
                             db.updateUserEmail(userId, newEmail)
                             Toast.makeText(this, "Email updated.", Toast.LENGTH_SHORT).show()
                         } else if (db.isEmailExist(newEmail)) {
                             Toast.makeText(this, "E-MAIL ALREADY EXISTS", Toast.LENGTH_LONG).show()
                         }
+                    } else {
+                        println("EMAIL: Empty")
                     }
 
                     // Check and update password
@@ -73,6 +79,8 @@ class Profile : AppCompatActivity() {
                         } else {
                             Toast.makeText(this, "Passwords do not match.", Toast.LENGTH_SHORT).show()
                         }
+                    } else {
+                        println("PASSWORD: Empty")
                     }
                 }
 
