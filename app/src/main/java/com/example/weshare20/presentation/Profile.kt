@@ -43,22 +43,41 @@ class Profile : AppCompatActivity() {
                 profileEmail.hint = email
 
                 profileUpdateButton.setOnClickListener {
-                    if (user.phoneNumber != profilePhoneNumber.text.toString().toInt() && !db.isPhoneNumberExist(profilePhoneNumber.text.toString().toInt())) {
-                        db.updateUserPhoneNumber(userId, profilePhoneNumber.text.toString().toInt())
-                    } else if (db.isPhoneNumberExist(profilePhoneNumber.text.toString().toInt())) {
-                        Toast.makeText(this, "PHONE NUMBER ALREADY EXIST", Toast.LENGTH_LONG).show()
+                    // Check and update phone number
+                    try {
+                        val newPhoneNumber = profilePhoneNumber.text.toString().toInt()
+                        if (user.phoneNumber != newPhoneNumber && !db.isPhoneNumberExist(newPhoneNumber)) {
+                            db.updateUserPhoneNumber(userId, newPhoneNumber)
+                            Toast.makeText(this, "Phone number updated.", Toast.LENGTH_SHORT).show()
+                        } else if (db.isPhoneNumberExist(newPhoneNumber)) {
+                            Toast.makeText(this, "PHONE NUMBER ALREADY EXISTS", Toast.LENGTH_LONG).show()
+                        }
+                    } catch (e: NumberFormatException) {
+                        Toast.makeText(this, "Invalid phone number.", Toast.LENGTH_SHORT).show()
                     }
 
-                    if (user.email != profileEmail.text.toString() && !db.isEmailExist(profileEmail.text.toString())) {
-                        db.updateUserEmail(userId, profileEmail.text.toString())
-                    } else if (db.isEmailExist(profileEmail.text.toString())) {
-                        Toast.makeText(this, "E-MAIL ALREADY EXIST", Toast.LENGTH_LONG).show()
+                    // Check and update email
+                    val newEmail = profileEmail.text.toString()
+                    if (user.email != newEmail && !db.isEmailExist(newEmail)) {
+                        db.updateUserEmail(userId, newEmail)
+                        Toast.makeText(this, "Email updated.", Toast.LENGTH_SHORT).show()
+                    } else if (db.isEmailExist(newEmail)) {
+                        Toast.makeText(this, "E-MAIL ALREADY EXISTS", Toast.LENGTH_LONG).show()
                     }
 
-                    if (user.password != profilePassword.text.toString() && profilePassword.text.toString() == profileConfirmPassword.text.toString()) {
-                        db.updateUserPassword(userId, profilePassword.text.toString())
+                    // Check and update password
+                    val newPassword = profilePassword.text.toString()
+                    val confirmPassword = profileConfirmPassword.text.toString()
+                    if (newPassword.isNotEmpty()) {
+                        if (newPassword == confirmPassword) {
+                            db.updateUserPassword(userId, newPassword)
+                            Toast.makeText(this, "Password updated.", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this, "Passwords do not match.", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
+
 
                 profileNotificationSwitch.setOnCheckedChangeListener { _, isChecked ->
                     if (isChecked) {

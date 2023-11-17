@@ -22,6 +22,8 @@ class LoginActivity : AppCompatActivity() {
         val db = DatabaseHandler(this)
         val session = SessionManager(this)
 
+        val deleteDBButton: Button = findViewById(R.id.deleteDBButton)
+
         // db.deleteDatabase(this)
 
         loginButton.setOnClickListener {
@@ -52,6 +54,10 @@ class LoginActivity : AppCompatActivity() {
         signupButton.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
+        }
+
+        deleteDBButton.setOnClickListener {
+            db.deleteDatabase(this)
         }
     }
 

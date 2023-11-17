@@ -59,7 +59,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
 
         db?.insert("Users", null, values)
 
-        db?.close()
+        //db?.close()
     }
 
     @SuppressLint("Range")
@@ -75,7 +75,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         }
 
         cursor.close()
-        db.close()
+        //db.close()
 
         return userId
     }
@@ -100,7 +100,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         }
 
         cursor.close()
-        db.close()
+        //db.close()
 
         return user
     }
@@ -125,7 +125,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         }
 
         cursor.close()
-        db.close()
+        //db.close()
 
         return user
     }
@@ -143,7 +143,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         }
 
         cursor.close()
-        db.close()
+        //db.close()
 
         return isExists
     }
@@ -161,7 +161,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         }
 
         cursor.close()
-        db.close()
+        //db.close()
 
         return isExists
     }
@@ -178,7 +178,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         }
 
         cursor.close()
-        db.close()
+        //db.close()
 
         return isExists
     }
@@ -191,7 +191,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         values.put("phoneNumber", newPhoneNumber)
 
         db.update("Users", values, "userID = ?", arrayOf(userId.toString()))
-        db.close()
+        //db.close()
     }
 
     fun updateUserEmail(userId: Int, newEmail: String) {
@@ -200,7 +200,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         values.put("email", newEmail)
 
         db.update("Users", values, "userID = ?", arrayOf(userId.toString()))
-        db.close()
+        //db.close()
     }
 
     fun updateUserPassword(userId: Int, newPassword: String) {
@@ -209,7 +209,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         values.put("password", newPassword)
 
         db.update("Users", values, "userID = ?", arrayOf(userId.toString()))
-        db.close()
+        //db.close()
     }
 
     // ----- Group ----- //
@@ -221,7 +221,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         }
 
         db?.insert("Groups", null, values)
-        db?.close()
+        //db?.close()
     }
 
     fun addUserToGroup(userID: Int, groupID: Int) {
@@ -232,13 +232,13 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         }
 
         db?.insert("UserGroups", null, values)
-        db?.close()
+        //db?.close()
     }
 
     fun removeUserFromGroup(userID: Int, groupID: Int) {
         val db = this.writableDatabase
         db?.delete("UserGroups", "userID=? AND groupID=?", arrayOf(userID.toString(), groupID.toString()))
-        db?.close()
+        //db?.close()
     }
 
     @SuppressLint("Range")
@@ -263,7 +263,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         }
 
         cursor.close()
-        db.close()
+        //db.close()
         return groups
     }
 
@@ -291,7 +291,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         }
 
         cursor.close()
-        db.close()
+        //db.close()
         return users
     }
 
