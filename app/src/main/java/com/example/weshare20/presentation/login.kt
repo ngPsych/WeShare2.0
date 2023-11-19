@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.weshare20.R
 import com.example.weshare20.business.DatabaseHandler
 import com.example.weshare20.business.SessionManager
+import com.example.weshare20.business.User
 
 class LoginActivity : AppCompatActivity() {
 
@@ -22,7 +23,24 @@ class LoginActivity : AppCompatActivity() {
         val db = DatabaseHandler(this)
         val session = SessionManager(this)
 
-        db.deleteDatabase(this)
+        val deleteDBButton: Button = findViewById(R.id.deleteDBButton)
+
+        val usernameResult = db.isUsernameExists("rr")
+        val emailResult = db.isEmailExist("jens@jensen.com")
+
+        when {
+            usernameResult -> {
+                println("username already exist")
+            }
+            emailResult -> {
+                println("email already exist")
+            }
+            else -> {
+                db.createUser(User("Jens Jensen", "rr", "1234", 80808080, "jens@jensen.com"))
+            }
+        }
+
+        // db.deleteDatabase(this)
 
         loginButton.setOnClickListener {
             val username = usernameEditText.text.toString()
@@ -32,6 +50,7 @@ class LoginActivity : AppCompatActivity() {
             println("$password" )
             // Add your login logic here
             val userId = db.authenticateUser(username, password)
+            print(userId)
 
             if (userId != null) {
                 // Authentication successful
@@ -51,6 +70,10 @@ class LoginActivity : AppCompatActivity() {
         signupButton.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
+        }
+
+        deleteDBButton.setOnClickListener {
+            db.deleteDatabase(this)
         }
     }
 
