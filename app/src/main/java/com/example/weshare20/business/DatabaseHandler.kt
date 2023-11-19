@@ -19,9 +19,100 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
                 email TEXT
             );
         """
+        //EXPENSEE
+        val createExpensesTableQuery = """
+    CREATE TABLE Expenses (
+        expenseId INTEGER PRIMARY KEY AUTOINCREMENT,
+        amount REAL,
+        description TEXT,
+        payerId INTEGER,
+        groupId INTEGER,
+        date TEXT,
+        FOREIGN KEY(payerId) REFERENCES Users(userID),
+        FOREIGN KEY(groupId) REFERENCES Groups(groupId)
+    );
+"""
+
+        db?.execSQL(createExpensesTableQuery)
 
         db?.execSQL(createUsersTableQuery)
     }
+
+    //EXPENSEEE
+
+    @SuppressLint("Range")
+    fun getUserIdByUsername(username: String): Int? {
+        val db = this.readableDatabase
+        var userId: Int? = null
+
+        val query = "SELECT userID FROM Users WHERE username = ?"
+        val cursor = db.rawQuery(query, arrayOf(username))
+
+        if (cursor.moveToFirst()) {
+            userId = cursor.getInt(cursor.getColumnIndex("userID"))
+        }
+
+        cursor.close()
+        db.close()
+
+        return userId
+    }
+
+    fun createExpense(expense: Expense) {
+        val db = this.writableDatabase
+
+        val payerId = getUserIdByUsername(expense.payer.username) // Get userId based on username
+        payerId?.let { id ->
+            val values = ContentValues().apply {
+                put("amount", expense.amount)
+                put("description", expense.description)
+                put("payerId", id)
+                put("groupId", expense.groupId)
+                put("date", expense.date)
+            }
+
+            db.insert("Expenses", null, values)
+        }
+
+        db.close()
+    }
+
+    @SuppressLint("Range")
+    fun getExpensesForGroup(groupId: String): List<Expense> {
+        val db = this.readableDatabase
+        val expenses = mutableListOf<Expense>()
+        val query = "SELECT * FROM Expenses WHERE groupId = ?"
+        val cursor = db.rawQuery(query, arrayOf(groupId))
+
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getString(cursor.getColumnIndex("expenseId"))
+                val amount = cursor.getDouble(cursor.getColumnIndex("amount"))
+                val description = cursor.getString(cursor.getColumnIndex("description"))
+                val payerId = cursor.getInt(cursor.getColumnIndex("payerId"))
+                val date = cursor.getString(cursor.getColumnIndex("date"))
+
+                // Assuming you have a method to get User by userId
+                val payer = getUserInfo(payerId)
+                payer?.let {
+                    val expense = Expense(id, amount, description, it, groupId, date)
+                    expenses.add(expense)
+                }
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        db.close()
+        return expenses
+    }
+
+    fun splitExpense(expense: Expense, group: Group): Map<User, Double> {
+        val amountPerPerson = expense.amount / group.participants.size
+        return group.participants.associateWith { amountPerPerson }
+    }
+
+
+
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
         // drops the table if it already exists? might not be necessary
@@ -43,6 +134,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
 
         db?.close()
     }
+
 
     @SuppressLint("Range")
     fun authenticateUser(username: String, password: String): Int? {
