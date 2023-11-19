@@ -3,33 +3,57 @@ package com.example.weshare20.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.weshare20.R
 import com.example.weshare20.business.DatabaseHandler
 import com.example.weshare20.business.Expense
+import com.example.weshare20.business.Group
+import com.example.weshare20.business.SessionManager
 import java.util.UUID
 
 class MyGroups : AppCompatActivity() {
     private lateinit var db: DatabaseHandler
+    private lateinit var sessionManager: SessionManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_groups)
 
         db = DatabaseHandler(this)
+        sessionManager = SessionManager(this)
 
-
+        val currentUserId = sessionManager.getUserId()
+        if (currentUserId != -1) {
+            displayUserGroups(currentUserId)
+        }
+        /*
         val buttonAddExpense: Button = findViewById(R.id.buttonAddExpense)
         buttonAddExpense.setOnClickListener {
             showAddExpenseDialog()
         }
 
+         */
+
         // Load and display the list of groups...
     }
-    private fun showAddExpenseDialog() {
+
+    private fun displayUserGroups(userId: Int) {
+        val userGroups = db.getUserGroups(userId)
+
+        val listView = findViewById<ListView>(R.id.groupsListView)
+        val adapter = GroupAdapter(this, userGroups) { group ->
+            showAddExpenseDialog(group)
+        }
+
+        listView.adapter = adapter
+    }
+    private fun showAddExpenseDialog(selectedGroup: Group) {
 
         // Define payer and groupId here. These should be determined based on your app's flow.
         // For demonstration, I am setting them to default values. Replace with your logic.
@@ -89,6 +113,9 @@ class MyGroups : AppCompatActivity() {
              */
         }
     }
+
+
+
 
 
 
