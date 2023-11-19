@@ -7,5 +7,7 @@ data class Expense (
     val description: String,
     val payer: User,
     val groupId: String,
-    val date: String // Consider using a Date type
+    val date: String, // Consider using a Date type
+    val participants: List<User> = emptyList()
+
 )

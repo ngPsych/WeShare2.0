@@ -3,7 +3,6 @@ package com.example.weshare20.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
@@ -14,9 +13,10 @@ import com.example.weshare20.business.DatabaseHandler
 import com.example.weshare20.business.Expense
 import com.example.weshare20.business.Group
 import com.example.weshare20.business.SessionManager
+import com.example.weshare20.business.User
 import java.util.UUID
 
-class MyGroups : AppCompatActivity() {
+class MyGroups(val participants: List<User>) : AppCompatActivity() {
     private lateinit var db: DatabaseHandler
     private lateinit var sessionManager: SessionManager
 
@@ -53,6 +53,7 @@ class MyGroups : AppCompatActivity() {
 
         listView.adapter = adapter
     }
+
     private fun showAddExpenseDialog(selectedGroup: Group) {
 
         // Define payer and groupId here. These should be determined based on your app's flow.
@@ -84,7 +85,7 @@ class MyGroups : AppCompatActivity() {
             val payerName = editTextPayer.text.toString()
             val groupIdInput = editTextGroupId.text.toString().toIntOrNull()
             val date = editTextDate.text.toString()
-           // val payer = db.getUserByUsername(payerName)
+            // val payer = db.getUserByUsername(payerName)
             val payer = db.getUserByUsername(payerName) ?: return@setOnClickListener
 
 
@@ -100,8 +101,10 @@ class MyGroups : AppCompatActivity() {
                 description = description,
                 payer = payer,
                 groupId = groupIdInput.toString(),
-                date = date
+                date = date,
+                participants = null
             )
+
             db.createExpense(expense)
             dialog.dismiss()
 
@@ -111,12 +114,14 @@ class MyGroups : AppCompatActivity() {
             }
 
              */
+
+
         }
     }
-
-
-
-
-
-
 }
+
+
+
+
+
+
