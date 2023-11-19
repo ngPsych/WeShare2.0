@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editTextGroupName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Group Name"/>
+
+    <EditText
+        android:id="@+id/editTextGroupDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Group Description"/>
+
+    <Button
+        android:id="@+id/buttonSubmitCreateGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Group"/>
+
+    <Button
+        android:id="@+id/buttonSelectUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Users"/>
+
+</LinearLayout>

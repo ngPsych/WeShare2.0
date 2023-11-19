@@ -71,10 +71,29 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         }
 
         cursor.close()
-        db.close()
+ //       db.close()
 
         return userId
     }
+
+    fun getAllUsernames(): List<String> {
+        val db = this.readableDatabase
+        val usernames = mutableListOf<String>()
+        val selectQuery = "SELECT username FROM Users"
+
+        val cursor = db.rawQuery(selectQuery, null)
+        if (cursor.moveToFirst()) {
+            do {
+                val username = cursor.getString(cursor.getColumnIndex("username"))
+                usernames.add(username)
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+
+        return usernames
+    }
+
 
     fun createExpense(expense: Expense) {
         val db = this.writableDatabase
@@ -92,7 +111,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
             db.insert("Expenses", null, values)
         }
 
-        db.close()
+     //   db.close()
     }
 
     @SuppressLint("Range")
@@ -129,6 +148,42 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         return group.participants.associateWith { amountPerPerson }
     }
 
+    @SuppressLint("Range")
+    fun getDefaultPayer(): User? {
+        val db = this.readableDatabase
+        val query = "SELECT * FROM Users LIMIT 1"
+        val cursor = db.rawQuery(query, null)
+        var user: User? = null
+
+        if (cursor.moveToFirst()) {
+            val fullname = cursor.getString(cursor.getColumnIndex("fullname"))
+            val username = cursor.getString(cursor.getColumnIndex("username"))
+            val password = cursor.getString(cursor.getColumnIndex("password"))
+            val phoneNumber = cursor.getInt(cursor.getColumnIndex("phoneNumber"))
+            val email = cursor.getString(cursor.getColumnIndex("email"))
+            user = User(fullname, username, password, phoneNumber, email)
+        }
+
+        cursor.close()
+       // db.close()
+        return user
+    }
+
+    @SuppressLint("Range")
+    fun getCurrentGroupId(): Int? {
+        val db = this.readableDatabase
+        val query = "SELECT groupID FROM Groups LIMIT 1"
+        val cursor = db.rawQuery(query, null)
+        var groupId: Int? = null
+
+        if (cursor.moveToFirst()) {
+            groupId = cursor.getInt(cursor.getColumnIndex("groupID"))
+        }
+
+        cursor.close()
+       // db.close()
+        return groupId
+    }
 
 
 
@@ -222,6 +277,28 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         return user
     }
 
+    @SuppressLint("Range")
+    fun getUserByUsername(username: String): User? {
+        val db = this.readableDatabase
+        val query = "SELECT * FROM Users WHERE username = ?"
+        val cursor = db.rawQuery(query, arrayOf(username))
+        var user: User? = null
+
+        if (cursor.moveToFirst()) {
+            val fullname = cursor.getString(cursor.getColumnIndex("fullname"))
+            val username = cursor.getString(cursor.getColumnIndex("username"))
+            val password = cursor.getString(cursor.getColumnIndex("password"))
+            val phoneNumber = cursor.getInt(cursor.getColumnIndex("phoneNumber"))
+            val email = cursor.getString(cursor.getColumnIndex("email"))
+            user = User(fullname, username, password, phoneNumber, email)
+        }
+
+        cursor.close()
+        db.close()
+        return user
+    }
+
+
     fun isUsernameExists(username: String): Boolean {
         val db = this.readableDatabase
         var isExists = false
@@ -305,16 +382,19 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
     }
 
     // ----- Group ----- //
-    fun createGroup(group: Group) {
+    fun createGroup(group: Group): Long {
         val db = this.writableDatabase
         val values = ContentValues().apply {
             put("groupName", group.name)
             put("description", group.description)
+            // Add other fields as necessary
         }
 
-        db?.insert("Groups", null, values)
-        //db?.close()
+        val groupId = db.insert("Groups", null, values)
+        db.close()
+        return groupId // This is the ID of the newly created group
     }
+
 
     fun addUserToGroup(userID: Int, groupID: Int) {
         val db = this.writableDatabase

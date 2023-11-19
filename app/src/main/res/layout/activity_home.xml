@@ -32,6 +32,19 @@
 
         <!-- Add other header elements as needed -->
 
+        <Button
+            android:id="@+id/btnCreateGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Group" />
+
+        <Button
+            android:id="@+id/buttonMyGroups"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Groups"/>
+
+
     </LinearLayout>
 
 

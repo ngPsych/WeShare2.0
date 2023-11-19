@@ -3,6 +3,7 @@ package com.example.weshare20.presentation
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import com.example.weshare20.business.DatabaseHandler
@@ -41,6 +42,18 @@ class Home : AppCompatActivity() {
             }
         } else {
             // For something if the user is not logged in, might not be necessary
+        }
+
+        val btnCreateGroup: Button = findViewById(R.id.btnCreateGroup)
+        btnCreateGroup.setOnClickListener {
+            val intent = Intent(this, CreateGroup::class.java)
+            startActivity(intent)
+        }
+
+        val buttonMyGroups: Button = findViewById(R.id.buttonMyGroups)
+        buttonMyGroups.setOnClickListener {
+            val intent = Intent(this, MyGroups::class.java)
+            startActivity(intent)
         }
     }
 }
