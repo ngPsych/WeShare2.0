@@ -9,6 +9,7 @@ import com.example.weshare20.R
 import com.example.weshare20.business.DatabaseHandler
 import com.example.weshare20.business.Group
 import com.example.weshare20.business.SessionManager
+import com.example.weshare20.business.UserGroup
 
 class CreateGroup : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +29,10 @@ class CreateGroup : AppCompatActivity() {
             val newGroup = Group(editTextGroupName.text.toString(), editTextDescription.text.toString())
             db.createGroup(newGroup)
             val groupId = db.getCurrentCreateGroupId(newGroup.name, newGroup.description)
-            db.addUserToGroup(userId, groupId)
+            val newUserGroup = UserGroup(userId, groupId)
+            db.addUserToGroup(newUserGroup)
+            print(newUserGroup)
+
 
             val intent = Intent(this, Home::class.java) // Replace YourTargetActivity with the actual class name of your target activity
             startActivity(intent)

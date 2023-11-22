@@ -224,11 +224,11 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         //db?.close()
     }
 
-    fun addUserToGroup(userID: Int, groupID: Int?) {
+    fun addUserToGroup(userGroup: UserGroup) {
         val db = this.writableDatabase
         val values = ContentValues().apply {
-            put("userID", userID)
-            put("groupID", groupID)
+            put("userID", userGroup.userID)
+            put("groupID", userGroup.groupID)
         }
 
         db?.insert("UserGroups", null, values)
