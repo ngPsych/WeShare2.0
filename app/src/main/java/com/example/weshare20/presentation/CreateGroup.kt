@@ -28,12 +28,7 @@ class CreateGroup : AppCompatActivity() {
             val newGroup = Group(editTextGroupName.text.toString(), editTextDescription.text.toString())
             db.createGroup(newGroup)
             val groupId = db.getCurrentCreateGroupId(newGroup.name, newGroup.description)
-
-            if (groupId != null) {
-                db.addUserToGroup(userId, groupId)
-            } else {
-                print("GroupID is null in CreateGroup.kt line 33")
-            }
+            db.addUserToGroup(userId, groupId)
 
             val intent = Intent(this, Home::class.java) // Replace YourTargetActivity with the actual class name of your target activity
             startActivity(intent)
