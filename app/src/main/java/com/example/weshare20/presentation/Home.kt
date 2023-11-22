@@ -3,10 +3,12 @@ package com.example.weshare20.presentation
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import com.example.weshare20.business.DatabaseHandler
 import com.example.weshare20.R
+import com.example.weshare20.business.Group
 import com.example.weshare20.business.SessionManager
 
 class Home : AppCompatActivity() {
@@ -41,6 +43,12 @@ class Home : AppCompatActivity() {
             }
         } else {
             // For something if the user is not logged in, might not be necessary
+        }
+
+        val addGroupButton: Button = findViewById(R.id.addGroupButton)
+        addGroupButton.setOnClickListener {
+            val intent = Intent(this, CreateGroup::class.java) // Replace YourTargetActivity with the actual class name of your target activity
+            startActivity(intent)
         }
     }
 }

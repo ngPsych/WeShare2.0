@@ -47,7 +47,7 @@
 
     <!-- Floating Action Button for adding new files -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddFile"
+        android:id="@+id/addGroupButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

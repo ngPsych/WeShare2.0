@@ -255,10 +255,10 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
 
         if (cursor.moveToFirst()) {
             do {
-                val groupID = cursor.getInt(cursor.getColumnIndex("groupID"))
+                //val groupID = cursor.getInt(cursor.getColumnIndex("groupID"))
                 val groupName = cursor.getString(cursor.getColumnIndex("groupName"))
                 val description = cursor.getString(cursor.getColumnIndex("description"))
-                groups.add(Group(groupID, groupName, description))
+                groups.add(Group(groupName, description))
             } while (cursor.moveToNext())
         }
 

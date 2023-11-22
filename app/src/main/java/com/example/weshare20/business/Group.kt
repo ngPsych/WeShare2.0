@@ -1,8 +1,12 @@
 package com.example.weshare20.business
 
 data class Group(
-    val id: Int,
     var name: String,
     var description: String) {
-        val participants: MutableList<User> = mutableListOf()
+    val participants: MutableList<String> = mutableListOf()
+
+    fun addParticipant(userId: String) {
+        participants.add(userId)
+    }
 }
+
