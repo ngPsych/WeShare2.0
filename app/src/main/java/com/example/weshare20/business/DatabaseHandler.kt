@@ -295,6 +295,22 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         return users
     }
 
+    fun getCurrentCreateGroupId(groupName: String, description: String): Int? {
+        val db = this.readableDatabase
+        val query = """
+        SELECT groupId
+        FROM Groups
+        WHERE name = ? AND description = ?
+    """
+        db.rawQuery(query, arrayOf(groupName, description)).use { cursor ->
+            if (cursor.moveToFirst()) {
+                return cursor.getInt(cursor.getColumnIndexOrThrow("groupId"))
+            }
+        }
+        return null // Return null if no group is found
+    }
+
+
     fun deleteDatabase(context: Context) {
         context.deleteDatabase("WeShare2.0_Database")
     }
