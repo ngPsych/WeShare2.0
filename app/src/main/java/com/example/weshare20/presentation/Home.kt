@@ -3,13 +3,12 @@ package com.example.weshare20.presentation
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import com.example.weshare20.business.DatabaseHandler
 import com.example.weshare20.R
-import com.example.weshare20.business.Group
 import com.example.weshare20.business.SessionManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class Home : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +21,7 @@ class Home : AppCompatActivity() {
         val userId = session.getUserId()
 
         val profilePicImageView: ImageView = findViewById(R.id.homeProfilePic)
+        val addGroupButton: FloatingActionButton = findViewById(R.id.addGroupButton)
 
         if (userId != -1) {
             // User is logged in
@@ -41,7 +41,7 @@ class Home : AppCompatActivity() {
                     startActivity(intent)
                 }
 
-                val addGroupButton: Button = findViewById(R.id.addGroupButton)
+
                 addGroupButton.setOnClickListener {
                     val intent = Intent(this, CreateGroup::class.java) // Replace YourTargetActivity with the actual class name of your target activity
                     startActivity(intent)
@@ -50,6 +50,6 @@ class Home : AppCompatActivity() {
         } else {
             // For something if the user is not logged in, might not be necessary
         }
-        
+
     }
 }
