@@ -40,15 +40,16 @@ class Home : AppCompatActivity() {
                     val intent = Intent(this, Profile::class.java) // Replace YourTargetActivity with the actual class name of your target activity
                     startActivity(intent)
                 }
+
+                val addGroupButton: Button = findViewById(R.id.addGroupButton)
+                addGroupButton.setOnClickListener {
+                    val intent = Intent(this, CreateGroup::class.java) // Replace YourTargetActivity with the actual class name of your target activity
+                    startActivity(intent)
+                }
             }
         } else {
             // For something if the user is not logged in, might not be necessary
         }
-
-        val addGroupButton: Button = findViewById(R.id.addGroupButton)
-        addGroupButton.setOnClickListener {
-            val intent = Intent(this, CreateGroup::class.java) // Replace YourTargetActivity with the actual class name of your target activity
-            startActivity(intent)
-        }
+        
     }
 }
