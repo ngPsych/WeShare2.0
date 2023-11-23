@@ -13,4 +13,23 @@
         android:text="BACK"
         tools:layout_editor_absoluteX="31dp"
         tools:layout_editor_absoluteY="32dp" />
+
+    <EditText
+        android:id="@+id/editTextViewPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Phone Number"
+        android:inputType="text"
+        android:padding="16dp"
+        android:layout_margin="10dp"
+        tools:layout_editor_absoluteX="-25dp"
+        tools:layout_editor_absoluteY="571dp" />
+
+    <Button
+        android:id="@+id/addUserButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADD USER"
+        tools:layout_editor_absoluteX="31dp"
+        tools:layout_editor_absoluteY="653dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

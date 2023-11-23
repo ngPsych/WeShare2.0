@@ -29,7 +29,7 @@ class CreateGroup : AppCompatActivity() {
         createGroupButton.setOnClickListener {
             val newGroup = Group(editTextGroupName.text.toString(), editTextDescription.text.toString())
             db.createGroup(newGroup)
-            val groupID = db.getCurrentCreateGroupID(newGroup.name, newGroup.description)
+            val groupID = db.getCurrentGroupID(newGroup.name, newGroup.description)
             val newUserGroup = UserGroup(userId, groupID)
             db.addUserToGroup(newUserGroup)
             print(newUserGroup)

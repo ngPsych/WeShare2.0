@@ -43,7 +43,6 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
                 userID INTEGER,
                 groupID INTEGER,
                 message TEXT,
-                status TEXT, -- 'PENDING', 'ACCEPTED', 'DECLINED'
                 FOREIGN KEY(userID) REFERENCES Users(userID),
                 FOREIGN KEY(groupID) REFERENCES Groups(groupID)
             );
@@ -309,7 +308,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         return users
     }
 
-    fun getCurrentCreateGroupID(groupName: String, description: String): Int? {
+    fun getCurrentGroupID(groupName: String, description: String): Int? {
         val db = this.readableDatabase
         val query = """
         SELECT groupID
@@ -324,7 +323,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         return null // Return null if no group is found
     }
 
-    fun sendGroupInviteNotification(userId: Int, groupId: Int, message: String) {
+    fun sendGroupInviteNotification(userId: Int?, groupId: Int?, message: String) {
         val db = this.writableDatabase
         val values = ContentValues().apply {
             put("userID", userId)
@@ -334,6 +333,23 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         }
 
         db.insert("Notifications", null, values)
+    }
+
+    fun getUserIDByPhoneNumber(phoneNumber: Int): Int? {
+        val db = this.writableDatabase
+        val query = """
+            SELECT userID
+            FROM Users
+            WHERE phoneNumber = ?
+        """
+
+        db.rawQuery(query, arrayOf(phoneNumber.toString())).use { cursor ->
+            if (cursor.moveToFirst()) {
+                return cursor.getInt(cursor.getColumnIndexOrThrow("userID"))
+            }
+
+        }
+        return null
     }
 
     @SuppressLint("Range")
@@ -355,12 +371,10 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         return notifications
     }
 
-    fun updateNotificationStatus(notificationID: Int, status: String) {
+    fun deleteNotification(userID: Int?, groupID: Int?, message: String?) {
         val db = this.writableDatabase
-        val values = ContentValues()
-        values.put("status", status)
-
-        db.update("Notifications", values, "notificationID = ?", arrayOf(notificationID.toString()))
+        db?.delete("Notification", "userID = ? AND groupID = ? AND message = ?", arrayOf(userID.toString(), groupID.toString(), message.toString()))
+        //db?.close()
     }
 
     /* Example of handling an accepted invite
