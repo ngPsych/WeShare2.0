@@ -1,7 +1,10 @@
+package com.example.weshare20.presentation
+
 import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ListView
 import com.example.weshare20.R
 import com.example.weshare20.business.DatabaseHandler
@@ -12,10 +15,11 @@ import com.example.weshare20.interfaces.NotificationActionListener
 
 class NotificationActivity : AppCompatActivity(), NotificationActionListener {
 
-    private lateinit var db: DatabaseHandler
-    private lateinit var session: SessionManager
-    private lateinit var notificationList: MutableList<Notification>
-    private lateinit var adapter: NotificationAdapter
+    private val db
+    private val session
+    private val notifications
+    private val adapter
+    private lateinit var notificationList: MutableList<Notification> // Declare as MutableList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,34 +27,28 @@ class NotificationActivity : AppCompatActivity(), NotificationActionListener {
 
         db = DatabaseHandler(this)
         session = SessionManager(this)
-
-        notificationList = mutableListOf() // Initialize an empty list
-        adapter = NotificationAdapter(this, notificationList, this)
+        notifications = db.getUserNotifications(session.getUserId()) // get your list of notifications
+        adapter = NotificationAdapter(this, notifications, this)
 
         val notificationListView: ListView = findViewById(R.id.notificationListView)
         notificationListView.adapter = adapter
-
-        loadNotifications() // Fetch and load notifications
-    }
-
-    private fun loadNotifications() {
-        // Load notifications using db and session
-        val userId = session.getUserId()
-        notificationList.clear() // Clear previous notifications
-        notificationList.addAll(db.getUserNotifications(userId))
-        adapter.notifyDataSetChanged()
     }
 
     override fun onAccept(notification: Notification, position: Int) {
-        db.addUserToGroup(UserGroup(notification.userID, notification.groupID))
-        db.deleteNotification(notification.userID, notification.groupID, notification.message)
+        // Now you have the position, you can retrieve the notification directly
+        db.addUserToGroup(UserGroup(notification?.userID, notification?.groupID))
+        db.deleteNotification(notification?.userID, notification?.groupID, notification?.message)
+        // You may want to remove the notification from the list and update the adapter
         notificationList.removeAt(position)
         adapter.notifyDataSetChanged()
     }
 
     override fun onDecline(notification: Notification, position: Int) {
-        db.deleteNotification(notification.userID, notification.groupID, notification.message)
+        // Handle decline action
+        db.deleteNotification(notification?.userID, notification?.groupID, notification?.message)
+        // Remove the notification from the list and update the adapter
         notificationList.removeAt(position)
         adapter.notifyDataSetChanged()
     }
+
 }
