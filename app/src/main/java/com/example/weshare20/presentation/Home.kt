@@ -22,8 +22,9 @@ class Home : AppCompatActivity() {
 
         val userId = session.getUserId()
 
-        val logOutButton: Button = findViewById(R.id.logOutButton)
         val profilePicImageView: ImageView = findViewById(R.id.homeProfilePic)
+        val notificationButton: ImageView = findViewById(R.id.notificationButton)
+        val logOutButton: Button = findViewById(R.id.logOutButton)
         val addGroupButton: FloatingActionButton = findViewById(R.id.addGroupButton)
 
         val groupListView: ListView = findViewById(R.id.groupListView)
@@ -58,13 +59,18 @@ class Home : AppCompatActivity() {
                 }
 
                 profilePicImageView.setOnClickListener {
-                    val intent = Intent(this, Profile::class.java) // Replace YourTargetActivity with the actual class name of your target activity
+                    val intent = Intent(this, Profile::class.java)
                     startActivity(intent)
                 }
 
 
                 addGroupButton.setOnClickListener {
-                    val intent = Intent(this, CreateGroup::class.java) // Replace YourTargetActivity with the actual class name of your target activity
+                    val intent = Intent(this, CreateGroup::class.java)
+                    startActivity(intent)
+                }
+
+                notificationButton.setOnClickListener {
+                    val intent = Intent(this, NotificationActivity::class.java)
                     startActivity(intent)
                 }
             }
