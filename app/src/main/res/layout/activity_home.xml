@@ -10,25 +10,10 @@
     <!-- Header -->
     <LinearLayout
         android:id="@+id/headerLayout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp">
-
-        <TextView
-            android:layout_width="181dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="WeShare"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/logOutButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="LOG OUT" />
 
         <ImageView
             android:id="@+id/homeProfilePic"
@@ -36,6 +21,20 @@
             android:layout_height="50dp"
             android:layout_gravity="end"
             android:src="@drawable/profilepic" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:src="@drawable/bell" />
+
+        <Button
+            android:id="@+id/logOutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="LOG OUT" />
 
         <!-- Add other header elements as needed -->
 
