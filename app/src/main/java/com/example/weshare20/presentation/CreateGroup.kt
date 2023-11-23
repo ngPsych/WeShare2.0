@@ -22,6 +22,7 @@ class CreateGroup : AppCompatActivity() {
         val userId = session.getUserId()
 
         val createGroupButton: Button = findViewById(R.id.createGroupButton)
+        val cancelButton: Button = findViewById(R.id.cancelButton)
         val editTextGroupName: EditText = findViewById(R.id.editTextGroupName)
         val editTextDescription: EditText = findViewById(R.id.editTextDescription)
 
@@ -34,7 +35,12 @@ class CreateGroup : AppCompatActivity() {
             print(newUserGroup)
 
 
-            val intent = Intent(this, Home::class.java) // Replace YourTargetActivity with the actual class name of your target activity
+            val intent = Intent(this, Home::class.java)
+            startActivity(intent)
+        }
+
+        cancelButton.setOnClickListener {
+            val intent = Intent(this, Home::class.java)
             startActivity(intent)
         }
     }

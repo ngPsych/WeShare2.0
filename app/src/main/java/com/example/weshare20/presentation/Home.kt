@@ -3,6 +3,7 @@ package com.example.weshare20.presentation
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.Toast
@@ -21,6 +22,7 @@ class Home : AppCompatActivity() {
 
         val userId = session.getUserId()
 
+        val logOutButton: Button = findViewById(R.id.logOutButton)
         val profilePicImageView: ImageView = findViewById(R.id.homeProfilePic)
         val addGroupButton: FloatingActionButton = findViewById(R.id.addGroupButton)
 
@@ -36,6 +38,12 @@ class Home : AppCompatActivity() {
             if (user != null) {
                 val fullname = user.fullname
                 Toast.makeText(this, "Hi $fullname", Toast.LENGTH_LONG).show()
+
+                logOutButton.setOnClickListener {
+                    session.clearSession()
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                }
 
                 groupListView.setOnItemClickListener { parent, view, position, id ->
                     val group = adapter.getItem(position)
