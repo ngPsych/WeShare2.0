@@ -43,7 +43,7 @@
         android:layout_below="@id/headerLayout"
         android:layout_marginTop="16dp"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp"/>
+        android:dividerHeight="10dp"/>
 
     <!-- Floating Action Button for adding new files -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
