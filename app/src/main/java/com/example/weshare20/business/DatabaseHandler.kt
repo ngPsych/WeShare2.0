@@ -356,7 +356,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
     fun getUserNotifications(userID: Int): List<Notification> {
         val notifications = mutableListOf<Notification>()
         val db = this.readableDatabase
-        val selectQuery = "SELECT * FROM Notifications WHERE userID = ? AND status = 'PENDING'"
+        val selectQuery = "SELECT * FROM Notifications WHERE userID = ?"
         val cursor = db.rawQuery(selectQuery, arrayOf(userID.toString()))
 
         if (cursor.moveToFirst()) {
