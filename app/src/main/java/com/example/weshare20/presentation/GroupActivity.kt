@@ -32,6 +32,7 @@ class GroupActivity : AppCompatActivity() {
             val userID = db.getUserIDByPhoneNumber(editTextViewPhoneNumber.text.toString().toInt())
             val groupID = db.getCurrentGroupID(groupName.toString(), groupDescription.toString())
             db.sendGroupInviteNotification(userID, groupID, "You have been invited to join $groupName")
+            Toast.makeText(this, "UserID: $userID, GroupID: $groupID", Toast.LENGTH_LONG).show()
         }
     }
 }
