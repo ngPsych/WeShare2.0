@@ -15,11 +15,10 @@ import com.example.weshare20.interfaces.NotificationActionListener
 
 class NotificationActivity : AppCompatActivity(), NotificationActionListener {
 
-    private val db
-    private val session
-    private val notifications
-    private val adapter
     private lateinit var notificationList: MutableList<Notification> // Declare as MutableList
+    private lateinit var adapter: NotificationAdapter
+    private lateinit var db: DatabaseHandler
+    private lateinit var session: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +26,9 @@ class NotificationActivity : AppCompatActivity(), NotificationActionListener {
 
         db = DatabaseHandler(this)
         session = SessionManager(this)
-        notifications = db.getUserNotifications(session.getUserId()) // get your list of notifications
-        adapter = NotificationAdapter(this, notifications, this)
+        val notifications = db.getUserNotifications(session.getUserId()) // get your list of notifications
+        notificationList = notifications.toMutableList()
+        adapter = NotificationAdapter(this, notificationList, this)
 
         val notificationListView: ListView = findViewById(R.id.notificationListView)
         notificationListView.adapter = adapter
@@ -36,8 +36,8 @@ class NotificationActivity : AppCompatActivity(), NotificationActionListener {
 
     override fun onAccept(notification: Notification, position: Int) {
         // Now you have the position, you can retrieve the notification directly
-        db.addUserToGroup(UserGroup(notification?.userID, notification?.groupID))
-        db.deleteNotification(notification?.userID, notification?.groupID, notification?.message)
+        db.addUserToGroup(UserGroup(notification.userID, notification.groupID))
+        db.deleteNotification(notification.userID, notification.groupID, notification.message)
         // You may want to remove the notification from the list and update the adapter
         notificationList.removeAt(position)
         adapter.notifyDataSetChanged()
@@ -45,10 +45,9 @@ class NotificationActivity : AppCompatActivity(), NotificationActionListener {
 
     override fun onDecline(notification: Notification, position: Int) {
         // Handle decline action
-        db.deleteNotification(notification?.userID, notification?.groupID, notification?.message)
+        db.deleteNotification(notification.userID, notification.groupID, notification.message)
         // Remove the notification from the list and update the adapter
         notificationList.removeAt(position)
         adapter.notifyDataSetChanged()
     }
-
 }
