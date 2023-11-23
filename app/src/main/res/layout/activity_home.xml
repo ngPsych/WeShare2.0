@@ -37,7 +37,7 @@
 
     <!-- File List -->
     <ListView
-        android:id="@+id/fileListView"
+        android:id="@+id/groupListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/headerLayout"

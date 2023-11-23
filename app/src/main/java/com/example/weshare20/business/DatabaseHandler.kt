@@ -20,25 +20,39 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         """
 
         val createGroupsTableQuery = """
-    CREATE TABLE Groups (
-        groupID INTEGER PRIMARY KEY AUTOINCREMENT,
-        groupName TEXT,
-        description TEXT
-    );
-"""
+            CREATE TABLE Groups (
+                groupID INTEGER PRIMARY KEY AUTOINCREMENT,
+                groupName TEXT,
+                description TEXT
+            );
+        """
 
         val createUserGroupTableQuery = """
-    CREATE TABLE UserGroups (
-        userID INTEGER,
-        groupID INTEGER,
-        FOREIGN KEY(userID) REFERENCES Users(userID),
-        FOREIGN KEY(groupID) REFERENCES Groups(groupID),
-        PRIMARY KEY(userID, groupID)
-    );
-"""
+            CREATE TABLE UserGroups (
+                userID INTEGER,
+                groupID INTEGER,
+                FOREIGN KEY(userID) REFERENCES Users(userID),
+                FOREIGN KEY(groupID) REFERENCES Groups(groupID),
+                PRIMARY KEY(userID, groupID)
+            );
+        """
+
+        val createNotificationsTableQuery = """
+            CREATE TABLE Notifications (
+                notificationID INTEGER PRIMARY KEY AUTOINCREMENT,
+                userID INTEGER,
+                groupID INTEGER,
+                message TEXT,
+                status TEXT, -- 'PENDING', 'ACCEPTED', 'DECLINED'
+                FOREIGN KEY(userID) REFERENCES Users(userID),
+                FOREIGN KEY(groupID) REFERENCES Groups(groupID)
+            );
+        """
+
         db?.execSQL(createUsersTableQuery)
         db?.execSQL(createGroupsTableQuery)
         db?.execSQL(createUserGroupTableQuery)
+        db?.execSQL(createNotificationsTableQuery)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -310,7 +324,59 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         return null // Return null if no group is found
     }
 
+    fun sendGroupInviteNotification(userId: Int, groupId: Int, message: String) {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put("userID", userId)
+            put("groupID", groupId)
+            put("message", message)
+            put("status", "PENDING")
+        }
 
+        db.insert("Notifications", null, values)
+    }
+
+    @SuppressLint("Range")
+    fun getUserNotifications(userID: Int): List<Notification> {
+        val notifications = mutableListOf<Notification>()
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM Notifications WHERE userID = ? AND status = 'PENDING'"
+        val cursor = db.rawQuery(selectQuery, arrayOf(userID.toString()))
+
+        if (cursor.moveToFirst()) {
+            do {
+                val groupId = cursor.getInt(cursor.getColumnIndex("groupID"))
+                val message = cursor.getString(cursor.getColumnIndex("message"))
+                notifications.add(Notification(userID, groupId, message))
+            } while (cursor.moveToNext())
+        }
+
+        cursor.close()
+        return notifications
+    }
+
+    fun updateNotificationStatus(notificationID: Int, status: String) {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put("status", status)
+
+        db.update("Notifications", values, "notificationID = ?", arrayOf(notificationID.toString()))
+    }
+
+    /* Example of handling an accepted invite
+    fun onInviteAccepted(notification: Notification) {
+        addUserToGroup(UserGroup(notification.userID, notification.groupID))
+        updateNotificationStatus(notification.notificationID, "ACCEPTED")
+    }
+     */
+
+    /* NOTE
+    Nu har vi funktion til at tilføje person i gruppe og notification. Vi skal somehow gøre sådan at
+    når man inviterer en person til en gruppe, så sender den notifikationen først, og så når status
+    bliver til "ACCEPTED", altså at personen har accepteret, så skal den opdatere og tilføje
+    personen til gruppen.
+
+     */
     fun deleteDatabase(context: Context) {
         context.deleteDatabase("WeShare2.0_Database")
     }

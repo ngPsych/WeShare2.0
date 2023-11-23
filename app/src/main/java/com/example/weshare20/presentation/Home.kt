@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.ListView
 import android.widget.Toast
 import com.example.weshare20.business.DatabaseHandler
 import com.example.weshare20.R
@@ -23,18 +24,30 @@ class Home : AppCompatActivity() {
         val profilePicImageView: ImageView = findViewById(R.id.homeProfilePic)
         val addGroupButton: FloatingActionButton = findViewById(R.id.addGroupButton)
 
+        val groupListView: ListView = findViewById(R.id.groupListView)
+        val groups = db.getUserGroups(userId) // get your list of groups from the database
+        val adapter = GroupAdapter(this, groups)
+        groupListView.adapter = adapter
+
         if (userId != -1) {
             // User is logged in
             val user = db.getUserInfo(userId)
 
             if (user != null) {
                 val fullname = user.fullname
-                val username = user.username
-                val email = user.email
+                Toast.makeText(this, "Hi $fullname", Toast.LENGTH_LONG).show()
 
-                Toast.makeText(this, "Hi $fullname, $username, $email", Toast.LENGTH_LONG).show()
-                // Now you have the user's information
-                // You can use fullname, username, and email as needed
+                groupListView.setOnItemClickListener { parent, view, position, id ->
+                    val group = adapter.getItem(position)
+                    // Now you have access to group.name and group.description without using tags
+
+                    // Intent to start a new activity, passing group details
+                    val intent = Intent(this, GroupActivity::class.java).apply {
+                        putExtra("GROUP_NAME", group?.name)
+                        putExtra("GROUP_DESCRIPTION", group?.description)
+                    }
+                    startActivity(intent)
+                }
 
                 profilePicImageView.setOnClickListener {
                     val intent = Intent(this, Profile::class.java) // Replace YourTargetActivity with the actual class name of your target activity
