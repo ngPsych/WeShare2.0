@@ -372,7 +372,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
 
     fun deleteNotification(userID: Int?, groupID: Int?, message: String?) {
         val db = this.writableDatabase
-        db?.delete("Notification", "userID = ? AND groupID = ? AND message = ?", arrayOf(userID.toString(), groupID.toString(), message.toString()))
+        db?.delete("Notifications", "userID = ? AND groupID = ? AND message = ?", arrayOf(userID.toString(), groupID.toString(), message.toString()))
         //db?.close()
     }
 

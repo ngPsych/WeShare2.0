@@ -18,7 +18,7 @@ class NotificationAdapter(context: Context, notifications: List<Notification>, p
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.list_item_notification, parent, false)
         val notification = getItem(position)
 
-        val notificationTextView = view.findViewById<TextView>(R.id.notificationLayout)
+        val notificationTextView = view.findViewById<TextView>(R.id.notificationTextView)
         notificationTextView.text = notification?.message
 
         val acceptButton = view.findViewById<Button>(R.id.acceptButton)
