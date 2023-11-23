@@ -329,7 +329,6 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
             put("userID", userId)
             put("groupID", groupId)
             put("message", message)
-            put("status", "PENDING")
         }
 
         db.insert("Notifications", null, values)
