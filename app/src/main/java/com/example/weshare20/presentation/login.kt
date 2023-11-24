@@ -37,6 +37,7 @@ class LoginActivity : AppCompatActivity() {
             }
             else -> {
                 db.createUser(User("Jens Jensen", "rr", "1234", 80808080, "jens@jensen.com"))
+                db.createUser(User("Christian Christiansen", "gg", "1234", 22, "hej@hejsen.com"))
             }
         }
 

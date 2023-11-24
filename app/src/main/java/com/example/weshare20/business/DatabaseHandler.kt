@@ -328,7 +328,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         val userList = mutableListOf<Int>()
         val selectQuery = """
             SELECT userID
-            FROM UserGroup
+            FROM UserGroups
             WHERE groupID = ?
         """
 
