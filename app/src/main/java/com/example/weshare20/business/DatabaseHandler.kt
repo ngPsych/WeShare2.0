@@ -3,6 +3,7 @@ package com.example.weshare20.business
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
@@ -48,10 +49,24 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
             );
         """
 
+        val createExpensesTableQuery = """
+            CREATE TABLE Expenses (
+                expenseId INTEGER PRIMARY KEY AUTOINCREMENT,
+                amount REAL,
+                description TEXT,
+                payerId INTEGER,
+                groupId INTEGER,
+                date TEXT,
+                FOREIGN KEY(payerId) REFERENCES Users(userID),
+                FOREIGN KEY(groupId) REFERENCES Groups(groupId)
+            );
+        """
+
         db?.execSQL(createUsersTableQuery)
         db?.execSQL(createGroupsTableQuery)
         db?.execSQL(createUserGroupTableQuery)
         db?.execSQL(createNotificationsTableQuery)
+        db?.execSQL(createExpensesTableQuery)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -308,6 +323,59 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         return users
     }
 
+    @SuppressLint("Range")
+    fun getAllUsersInGroup(groupID: Int): List<Int> {
+        val userList = mutableListOf<Int>()
+        val selectQuery = """
+            SELECT userID
+            FROM UserGroup
+            WHERE groupID = ?
+        """
+
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery(selectQuery, null)
+        } catch (e: Exception) {
+            db.execSQL(selectQuery)
+            return emptyList() // Return an empty list on error or no data found
+        }
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    val userID = cursor.getInt(cursor.getColumnIndex("userID"))
+                    userList.add(userID)
+                } while (cursor.moveToNext())
+            }
+            cursor.close()
+        }
+        db.close()
+        return userList
+    }
+
+    @SuppressLint("Range")
+    fun getUserByUsername(username: String): User? {
+        val db = this.readableDatabase
+        val query = "SELECT * FROM Users WHERE username = ?"
+        val cursor = db.rawQuery(query, arrayOf(username))
+        var user: User? = null
+
+        if (cursor.moveToFirst()) {
+            val fullname = cursor.getString(cursor.getColumnIndex("fullname"))
+            val username = cursor.getString(cursor.getColumnIndex("username"))
+            val password = cursor.getString(cursor.getColumnIndex("password"))
+            val phoneNumber = cursor.getInt(cursor.getColumnIndex("phoneNumber"))
+            val email = cursor.getString(cursor.getColumnIndex("email"))
+            user = User(fullname, username, password, phoneNumber, email)
+        }
+
+        cursor.close()
+        db.close()
+        return user
+    }
+
     fun getCurrentGroupID(groupName: String, description: String): Int? {
         val db = this.readableDatabase
         val query = """
@@ -375,6 +443,44 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         db?.delete("Notifications", "userID = ? AND groupID = ? AND message = ?", arrayOf(userID.toString(), groupID.toString(), message.toString()))
         //db?.close()
     }
+
+    @SuppressLint("Range")
+    fun getUserIdByUsername(username: String): Int? {
+        val db = this.readableDatabase
+        var userId: Int? = null
+
+        val query = "SELECT userID FROM Users WHERE username = ?"
+        val cursor = db.rawQuery(query, arrayOf(username))
+
+        if (cursor.moveToFirst()) {
+            userId = cursor.getInt(cursor.getColumnIndex("userID"))
+        }
+
+        cursor.close()
+        //       db.close()
+
+        return userId
+    }
+
+    fun createExpense(expense: Expense) {
+        val db = this.writableDatabase
+
+        val payerId = getUserIdByUsername(expense.payer.username) // Get userId based on username
+        payerId?.let { id ->
+            val values = ContentValues().apply {
+                put("amount", expense.amount)
+                put("description", expense.description)
+                put("payerId", id)
+                put("groupId", expense.groupId)
+                put("date", expense.date)
+            }
+
+            db.insert("Expenses", null, values)
+        }
+
+        //   db.close()
+    }
+
 
     /* Example of handling an accepted invite
     fun onInviteAccepted(notification: Notification) {
