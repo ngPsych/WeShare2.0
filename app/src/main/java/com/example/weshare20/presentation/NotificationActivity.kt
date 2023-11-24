@@ -32,6 +32,12 @@ class NotificationActivity : AppCompatActivity(), NotificationActionListener {
 
         val notificationListView: ListView = findViewById(R.id.notificationListView)
         notificationListView.adapter = adapter
+
+        val backButton: Button = findViewById(R.id.backButton)
+        backButton.setOnClickListener {
+            val intent = Intent(this, Home::class.java)
+            startActivity(intent)
+        }
     }
 
     override fun onAccept(notification: Notification, position: Int) {
