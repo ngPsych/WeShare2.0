@@ -20,19 +20,18 @@
         android:hint="Description"/>
 
     <!-- Payer -->
-    <EditText
-        android:id="@+id/editTextPayer"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Payer"/>
+        android:text="Choose Payer"
+        android:textSize="20dp"/>
 
-    <!-- Group ID -->
-    <EditText
-        android:id="@+id/editTextGroupId"
+    <Spinner
+        android:id="@+id/payerSpinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="Group ID"/>
+        android:layout_height="wrap_content"/>
+
 
     <!-- Date -->
     <EditText

@@ -4,13 +4,18 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.weshare20.R
 import com.example.weshare20.business.DatabaseHandler
 import com.example.weshare20.business.Expense
+import com.example.weshare20.business.User
 
 class GroupActivity : AppCompatActivity() {
     private lateinit var db: DatabaseHandler
@@ -59,8 +64,7 @@ class GroupActivity : AppCompatActivity() {
         val editTextDescription = dialogView.findViewById<EditText>(R.id.editTextDescription)
         // Initialize other input fields similarly
 
-        val editTextPayer = dialogView.findViewById<EditText>(R.id.editTextPayer)
-        val editTextGroupId = dialogView.findViewById<EditText>(R.id.editTextGroupId)
+        val payerSpinner = dialogView.findViewById<Spinner>(R.id.payerSpinner)
         val editTextDate = dialogView.findViewById<EditText>(R.id.editTextDate)
 
         val dialog = AlertDialog.Builder(this)
@@ -69,34 +73,65 @@ class GroupActivity : AppCompatActivity() {
             .setCancelable(true)
             .show()
 
+        val userIDs = db.getAllUsersInGroup(groupID.toString().toInt())
+        val userList = mutableListOf<User>()
+
+        for (userID in userIDs) {
+            val userInfo = db.getUserInfo(userID)
+            userInfo?.let {
+                userList.add(it)
+            }
+        }
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, userList)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        payerSpinner.adapter = adapter
+
         dialogView.findViewById<Button>(R.id.buttonSaveExpense).setOnClickListener {
             val amount = editTextAmount.text.toString().toDoubleOrNull() ?: 0.0
             val description = editTextDescription.text.toString()
 
             // Retrieve data from other fields
-            val payerName = editTextPayer.text.toString()
-            val groupIdInput = editTextGroupId.text.toString().toIntOrNull()
             val date = editTextDate.text.toString()
-            // val payer = db.getUserByUsername(payerName)
-            val payer = db.getUserByUsername(payerName) ?: return@setOnClickListener
+
+            var payer: User? = null // Initialize payer as nullable User
+
+            payerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    val selectedItem = parent?.getItemAtPosition(position)
+                    if (selectedItem is User) {
+                        payer = selectedItem
+                        // Now you have the selected User object in the payer variable
+                    }
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Handle no item selected
+                }
+            }
 
 
-            if (amount <= 0 || description.isBlank() || payerName.isBlank() || groupIdInput == null || date.isBlank()) {
+
+            if (amount <= 0 || description.isBlank() || date.isBlank()) {
                 Toast.makeText(this, "Please enter valid data", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
 
-            val expense = Expense(
-                amount = amount,
-                description = description,
-                payer = payer,
-                groupId = groupIdInput.toString(),
-                date = date,
-                participants = null
-            )
+            val expense = payer?.let { it1 ->
+                Expense(
+                    amount = amount,
+                    description = description,
+                    payer = it1,
+                    groupId = groupID.toString(),
+                    date = date,
+                    participants = null
+                )
+            }
 
-            db.createExpense(expense)
+            if (expense != null) {
+                db.createExpense(expense)
+            }
             dialog.dismiss()
 
             /*else {
