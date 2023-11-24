@@ -336,7 +336,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         val cursor: Cursor?
 
         try {
-            cursor = db.rawQuery(selectQuery, null)
+            cursor = db.rawQuery(selectQuery, arrayOf(groupID.toString()))
         } catch (e: Exception) {
             db.execSQL(selectQuery)
             return emptyList() // Return an empty list on error or no data found

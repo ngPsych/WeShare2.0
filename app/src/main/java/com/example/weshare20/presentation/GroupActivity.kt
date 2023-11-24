@@ -85,7 +85,9 @@ class GroupActivity : AppCompatActivity() {
             }
         }
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, userList)
+        val myList = listOf(1, 2, 3, 4, 5) // Creates an immutable list
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, myList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         payerSpinner.adapter = adapter
 
