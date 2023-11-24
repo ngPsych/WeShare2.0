@@ -76,7 +76,6 @@ class GroupActivity : AppCompatActivity() {
 
         val userIDs = db.getAllUsersInGroup(groupID)
         val userList = mutableListOf<User>()
-        Toast.makeText(this, "UserID: $userIDs", Toast.LENGTH_LONG).show()
 
         for (userID in userIDs) {
             val userInfo = db.getUserInfo(userID)
@@ -85,9 +84,7 @@ class GroupActivity : AppCompatActivity() {
             }
         }
 
-        val myList = listOf(1, 2, 3, 4, 5) // Creates an immutable list
-
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, myList)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, userList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         payerSpinner.adapter = adapter
 
