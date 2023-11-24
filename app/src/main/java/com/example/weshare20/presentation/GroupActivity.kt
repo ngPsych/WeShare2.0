@@ -87,30 +87,28 @@ class GroupActivity : AppCompatActivity() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         payerSpinner.adapter = adapter
 
+        var payer: User? = null // Initialize payer as nullable User
+
+        payerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedItem = parent?.getItemAtPosition(position)
+                if (selectedItem is User) {
+                    payer = selectedItem
+                    // Now you have the selected User object in the payer variable
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Handle no item selected
+            }
+        }
+
         dialogView.findViewById<Button>(R.id.buttonSaveExpense).setOnClickListener {
             val amount = editTextAmount.text.toString().toDoubleOrNull() ?: 0.0
             val description = editTextDescription.text.toString()
 
             // Retrieve data from other fields
             val date = editTextDate.text.toString()
-
-            var payer: User? = null // Initialize payer as nullable User
-
-            payerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    val selectedItem = parent?.getItemAtPosition(position)
-                    if (selectedItem is User) {
-                        payer = selectedItem
-                        // Now you have the selected User object in the payer variable
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // Handle no item selected
-                }
-            }
-
-
 
             if (amount <= 0 || description.isBlank() || date.isBlank()) {
                 Toast.makeText(this, "Please enter valid data", Toast.LENGTH_SHORT).show()
