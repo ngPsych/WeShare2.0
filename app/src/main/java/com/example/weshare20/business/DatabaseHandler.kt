@@ -486,7 +486,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
     fun getTotalAmountPaidByUserInGroup(userId: Int, groupId: String): Double {
         val db = this.readableDatabase
         val cursor = db.rawQuery(
-            "SELECT SUM(amount) FROM Expenses WHERE payer_id = ? AND group_id = ?",
+            "SELECT SUM(amount) FROM Expenses WHERE payerId = ? AND groupId = ?",
             arrayOf(userId.toString(), groupId)
         )
         var total = 0.0
