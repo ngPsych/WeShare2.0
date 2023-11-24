@@ -64,12 +64,17 @@ class GroupActivity : AppCompatActivity() {
 
         val addUserButton: Button = findViewById(R.id.addUserButton)
         val editTextViewPhoneNumber: EditText = findViewById(R.id.editTextViewPhoneNumber)
-        addUserButton.setOnClickListener {
-            val userID = db.getUserIDByPhoneNumber(editTextViewPhoneNumber.text.toString().toInt())
-            val groupID = db.getCurrentGroupID(groupName.toString(), groupDescription.toString())
-            db.sendGroupInviteNotification(userID, groupID, "You have been invited to join $groupName")
-            Toast.makeText(this, "UserID: $userID, GroupID: $groupID", Toast.LENGTH_LONG).show()
+        if (editTextViewPhoneNumber.text.isNotEmpty()) {
+            addUserButton.setOnClickListener {
+                val userID = db.getUserIDByPhoneNumber(editTextViewPhoneNumber.text.toString().toInt())
+                val groupID = db.getCurrentGroupID(groupName.toString(), groupDescription.toString())
+                db.sendGroupInviteNotification(userID, groupID, "You have been invited to join $groupName")
+                Toast.makeText(this, "UserID: $userID, GroupID: $groupID", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            Toast.makeText(this, "Please enter a Phone Number to add user!", Toast.LENGTH_LONG).show()
         }
+
 
         val addExpenseButton: Button = findViewById(R.id.addExpenseButton)
         addExpenseButton.setOnClickListener {
