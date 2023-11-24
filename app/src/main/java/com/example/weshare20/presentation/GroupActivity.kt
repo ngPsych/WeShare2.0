@@ -84,9 +84,11 @@ class GroupActivity : AppCompatActivity() {
             }
         }
 
-        val fullNamesList = userList.map { it.fullname }
+// Create a map from full names to User objects
+        val fullNameToUserMap = userList.associateBy { it.fullname }
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, fullNamesList)
+// Use the keys from the map (the full names) for the adapter
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, fullNameToUserMap.keys.toList())
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         payerSpinner.adapter = adapter
 
@@ -94,11 +96,11 @@ class GroupActivity : AppCompatActivity() {
 
         payerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = parent?.getItemAtPosition(position)
-                if (selectedItem is User) {
-                    payer = selectedItem
-                    // Now you have the selected User object in the payer variable
-                }
+                // Get the selected item, which is the full name
+                val selectedFullName = parent?.getItemAtPosition(position) as? String
+                // Retrieve the User object from the map using the selected full name
+                payer = selectedFullName?.let { fullNameToUserMap[it] }
+                // Now payer will have the User object with username, fullname, etc.
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -118,12 +120,11 @@ class GroupActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-
-            val expense = payer?.let { it1 ->
+            val expense = payer?.let {
                 Expense(
                     amount = amount,
                     description = description,
-                    payer = it1,
+                    payer = it, // Use username here
                     groupId = groupID.toString(),
                     date = date,
                     participants = null
@@ -134,15 +135,7 @@ class GroupActivity : AppCompatActivity() {
                 db.createExpense(expense)
             }
             dialog.dismiss()
-
-            /*else {
-                // Handle invalid input
-                Toast.makeText(this, "Please enter a valid amount", Toast.LENGTH_SHORT).show()
-            }
-
-             */
-
-
         }
+
     }
 }
