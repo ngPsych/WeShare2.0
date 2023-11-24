@@ -9,25 +9,42 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ListView
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.weshare20.R
 import com.example.weshare20.business.DatabaseHandler
 import com.example.weshare20.business.Expense
+import com.example.weshare20.business.SessionManager
 import com.example.weshare20.business.User
 
 class GroupActivity : AppCompatActivity() {
     private lateinit var db: DatabaseHandler
+    private lateinit var session: SessionManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group)
 
         db = DatabaseHandler(this)
+        session = SessionManager(this)
 
         val groupName = intent.getStringExtra("GROUP_NAME")
         val groupDescription = intent.getStringExtra("GROUP_DESCRIPTION")
-        Toast.makeText(this, "Welcome to $groupName - $groupDescription", Toast.LENGTH_LONG).show()
+        val groupNameTextView: TextView = findViewById(R.id.groupNameTextView)
+        groupNameTextView.text = groupName
+        val descriptionTextView: TextView = findViewById(R.id.descriptionTextView)
+        descriptionTextView.text = groupDescription
+
+        val nameTextView: TextView = findViewById(R.id.nameTextView)
+        nameTextView.text = db.getUserInfo(session.getUserId())?.fullname
+
+        val receiveTextView: TextView = findViewById(R.id.receiveTextView)
+        receiveTextView.text = db.getTotalAmountToBeReceivedByUserInGroup(session.getUserId(), db.getCurrentGroupID(groupName.toString(), groupDescription.toString()).toString()).toString()
+
+        val debtTextView: TextView = findViewById(R.id.debtTextView)
+        debtTextView.text = db.getTotalAmountPaidByUserInGroup(session.getUserId(), db.getCurrentGroupID(groupName.toString(), groupDescription.toString()).toString()).toString()
 
         val backButton: Button = findViewById(R.id.backToHomeButton)
         backButton.setOnClickListener {
@@ -124,10 +141,10 @@ class GroupActivity : AppCompatActivity() {
                 Expense(
                     amount = amount,
                     description = description,
-                    payer = it, // Use username here
+                    payer = it,
+                    receiver = session.getUserId(),
                     groupId = groupID.toString(),
-                    date = date,
-                    participants = null
+                    date = date
                 )
             }
 

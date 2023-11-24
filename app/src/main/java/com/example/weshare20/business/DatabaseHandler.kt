@@ -55,9 +55,11 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
                 amount REAL,
                 description TEXT,
                 payerId INTEGER,
+                receiverId INTEGER,
                 groupId INTEGER,
                 date TEXT,
                 FOREIGN KEY(payerId) REFERENCES Users(userID),
+                FOREIGN KEY(receiverId) REFERENCES Users(userID),
                 FOREIGN KEY(groupId) REFERENCES Groups(groupId)
             );
         """
@@ -110,7 +112,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
 
     // This functions gets UserInfo through searching the userID (used for session)
     @SuppressLint("Range")
-    fun getUserInfo(userId: Int): User? {
+    fun getUserInfo(userId: Int?): User? {
         val db = this.readableDatabase
         var user: User? = null
 
@@ -479,6 +481,34 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         }
 
         //   db.close()
+    }
+
+    fun getTotalAmountPaidByUserInGroup(userId: Int, groupId: String): Double {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery(
+            "SELECT SUM(amount) FROM Expenses WHERE payer_id = ? AND group_id = ?",
+            arrayOf(userId.toString(), groupId)
+        )
+        var total = 0.0
+        if (cursor.moveToFirst()) {
+            total = cursor.getDouble(0)
+        }
+        cursor.close()
+        return total
+    }
+
+    fun getTotalAmountToBeReceivedByUserInGroup(userId: Int, groupId: String): Double {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery(
+            "SELECT SUM(amount) FROM Expenses WHERE receiver_id = ? AND group_id = ?",
+            arrayOf(userId.toString(), groupId)
+        )
+        var total = 0.0
+        if (cursor.moveToFirst()) {
+            total = cursor.getDouble(0)
+        }
+        cursor.close()
+        return total
     }
 
 
