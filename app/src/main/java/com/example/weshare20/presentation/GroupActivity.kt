@@ -84,7 +84,9 @@ class GroupActivity : AppCompatActivity() {
             }
         }
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, userList)
+        val fullNamesList = userList.map { it.fullname }
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, fullNamesList)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         payerSpinner.adapter = adapter
 
