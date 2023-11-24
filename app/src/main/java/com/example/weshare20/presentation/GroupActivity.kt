@@ -57,6 +57,7 @@ class GroupActivity : AppCompatActivity() {
         val groupName = intent.getStringExtra("GROUP_NAME")
         val groupDescription = intent.getStringExtra("GROUP_DESCRIPTION")
         val groupID = db.getCurrentGroupID(groupName.toString(), groupDescription.toString())
+        Toast.makeText(this, "GroupID: $groupID", Toast.LENGTH_LONG).show()
 
 
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_expense, null)
@@ -73,8 +74,9 @@ class GroupActivity : AppCompatActivity() {
             .setCancelable(true)
             .show()
 
-        val userIDs = db.getAllUsersInGroup(groupID.toString().toInt())
+        val userIDs = db.getAllUsersInGroup(groupID)
         val userList = mutableListOf<User>()
+        Toast.makeText(this, "UserID: $userIDs", Toast.LENGTH_LONG).show()
 
         for (userID in userIDs) {
             val userInfo = db.getUserInfo(userID)

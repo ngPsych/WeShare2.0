@@ -324,7 +324,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
     }
 
     @SuppressLint("Range")
-    fun getAllUsersInGroup(groupID: Int): List<Int> {
+    fun getAllUsersInGroup(groupID: Int?): List<Int> {
         val userList = mutableListOf<Int>()
         val selectQuery = """
             SELECT userID
