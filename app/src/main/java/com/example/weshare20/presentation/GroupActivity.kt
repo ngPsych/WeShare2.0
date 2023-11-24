@@ -40,11 +40,21 @@ class GroupActivity : AppCompatActivity() {
         val nameTextView: TextView = findViewById(R.id.nameTextView)
         nameTextView.text = db.getUserInfo(session.getUserId())?.fullname
 
+        val receiveAmount = db.getTotalAmountToBeReceivedByUserInGroup(
+            session.getUserId(),
+            db.getCurrentGroupID(groupName.toString(), groupDescription.toString()).toString()
+        ) ?: 0.0 // If null, default to 0.0
+
+        val debtAmount = db.getTotalAmountPaidByUserInGroup(
+            session.getUserId(),
+            db.getCurrentGroupID(groupName.toString(), groupDescription.toString()).toString()
+        ) ?: 0.0 // If null, default to 0.0
+
         val receiveTextView: TextView = findViewById(R.id.receiveTextView)
-        receiveTextView.text = db.getTotalAmountToBeReceivedByUserInGroup(session.getUserId(), db.getCurrentGroupID(groupName.toString(), groupDescription.toString()).toString()).toString()
+        receiveTextView.text = receiveAmount.toString()
 
         val debtTextView: TextView = findViewById(R.id.debtTextView)
-        debtTextView.text = db.getTotalAmountPaidByUserInGroup(session.getUserId(), db.getCurrentGroupID(groupName.toString(), groupDescription.toString()).toString()).toString()
+        debtTextView.text = debtAmount.toString()
 
         val backButton: Button = findViewById(R.id.backToHomeButton)
         backButton.setOnClickListener {
