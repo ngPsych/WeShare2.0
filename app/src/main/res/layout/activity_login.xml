@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.presentation.LoginActivity"
+    tools:context="com.example.weshare20.presentation.LoginActivity"
     android:orientation="vertical"
     >
 
@@ -35,4 +35,15 @@
         android:textColor="@color/link_color"
         android:layout_marginTop="16dp"
         android:textSize="16sp"/>
+    <Button
+        android:id="@+id/signupButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SIGN UP" />
+
+    <Button
+        android:id="@+id/deleteDBButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DELETE DB" />
 </LinearLayout>

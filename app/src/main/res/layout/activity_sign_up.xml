@@ -1,43 +1,65 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.weshare20.presentation.SignUpActivity">
 
     <EditText
-        android:id="@+id/signupFullname"
+        android:id="@+id/editTextFullname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="FullName"
-        android:inputType="textPersonName"/>
+        android:layout_marginBottom="16dp"
+        android:hint="Full name"
+        android:inputType="text" />
 
     <EditText
-        android:id="@+id/signupUsername"
+        android:id="@+id/editTextUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextFullname"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
         android:hint="Username"
-        android:inputType="textPersonName"/>
+        android:inputType="text" />
 
     <EditText
-        android:id="@+id/signupEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email"
-        android:inputType="textEmailAddress"/>
-
-    <EditText
-        android:id="@+id/signupPassword"
+        android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:layout_below="@+id/editTextUsername"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"/>
+
+    <EditText
+        android:id="@+id/editTextPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Phone Number"
+        android:inputType="number"
+        android:layout_below="@+id/editTextPassword"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"/>
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:layout_below="@+id/editTextPhoneNumber"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"/>
 
     <Button
-        android:id="@+id/signupButton"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnSignUp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign Up"
-        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/editTextEmail"
         android:layout_marginTop="16dp"/>
-</LinearLayout>
+
+</RelativeLayout>
