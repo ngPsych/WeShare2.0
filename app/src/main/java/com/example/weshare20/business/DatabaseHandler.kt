@@ -407,7 +407,7 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         val message = "Expense Alert: ${expense.description} of \$${expense.amount} paid by ${expense.payer.username} to user with ID ${expense.receiver} in group ${expense.groupId} on ${expense.date}."
 
         val values = ContentValues().apply {
-            put("userID", expense.receiver)
+            put("userID", expense.payer.userID)
             put("groupID", expense.groupId.toInt())
             put("message", message)
         }
