@@ -45,7 +45,7 @@ class SignUpActivity : AppCompatActivity() {
                     Toast.makeText(this, "Email already exists", Toast.LENGTH_LONG).show()
                 }
                 else -> {
-                    db.createUser(User(fullName, username, password, phoneNumber, email))
+                    db.createUser(User(fullname = fullName, username = username, password = password, phoneNumber = phoneNumber, email = email))
 
                     Toast.makeText(this, "Account created!", Toast.LENGTH_LONG).show()
 

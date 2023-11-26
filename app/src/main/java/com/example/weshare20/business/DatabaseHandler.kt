@@ -6,6 +6,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 
 class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0_Database", null, 1) {
     override fun onCreate(db: SQLiteDatabase?) {
@@ -120,13 +121,15 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         val cursor = db.rawQuery(query, arrayOf(userId.toString()))
 
         if (cursor.moveToFirst()) {
+            val userID = cursor.getInt(cursor.getColumnIndex("userID"))
+
             val fullname = cursor.getString(cursor.getColumnIndex("fullname"))
             val username = cursor.getString(cursor.getColumnIndex("username"))
             val password = cursor.getString(cursor.getColumnIndex("password"))
             val phoneNumber = cursor.getInt(cursor.getColumnIndex("phoneNumber"))
             val email = cursor.getString(cursor.getColumnIndex("email"))
 
-            user = User(fullname, username, password, phoneNumber, email)
+            user = User(userID,fullname, username, password, phoneNumber, email)
         }
 
         cursor.close()
@@ -145,13 +148,15 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         val cursor = db.rawQuery(query, arrayOf(username.toString()))
 
         if (cursor.moveToFirst()) {
+            val userID = cursor.getInt(cursor.getColumnIndex("userID"))
+
             val fullname = cursor.getString(cursor.getColumnIndex("fullname"))
             val username = cursor.getString(cursor.getColumnIndex("username"))
             val password = cursor.getString(cursor.getColumnIndex("password"))
             val phoneNumber = cursor.getInt(cursor.getColumnIndex("phoneNumber"))
             val email = cursor.getString(cursor.getColumnIndex("email"))
 
-            user = User(fullname, username, password, phoneNumber, email)
+            user = User(userID,fullname, username, password, phoneNumber, email)
         }
 
         cursor.close()
@@ -311,12 +316,14 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
 
         if (cursor.moveToFirst()) {
             do {
+                val userID = cursor.getInt(cursor.getColumnIndex("userID"))
+
                 val fullname = cursor.getString(cursor.getColumnIndex("fullname"))
                 val username = cursor.getString(cursor.getColumnIndex("username"))
                 val password = cursor.getString(cursor.getColumnIndex("password"))
                 val phoneNumber = cursor.getInt(cursor.getColumnIndex("phoneNumber"))
                 val email = cursor.getString(cursor.getColumnIndex("email"))
-                users.add(User(fullname, username, password, phoneNumber, email))
+                users.add(User(userID,fullname, username, password, phoneNumber, email))
             } while (cursor.moveToNext())
         }
 
@@ -365,12 +372,14 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         var user: User? = null
 
         if (cursor.moveToFirst()) {
+            val userID = cursor.getInt(cursor.getColumnIndex("userID"))
+
             val fullname = cursor.getString(cursor.getColumnIndex("fullname"))
             val username = cursor.getString(cursor.getColumnIndex("username"))
             val password = cursor.getString(cursor.getColumnIndex("password"))
             val phoneNumber = cursor.getInt(cursor.getColumnIndex("phoneNumber"))
             val email = cursor.getString(cursor.getColumnIndex("email"))
-            user = User(fullname, username, password, phoneNumber, email)
+            user = User(userID,fullname, username, password, phoneNumber, email)
         }
 
         cursor.close()
@@ -466,23 +475,29 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         return userId
     }
 
-    fun createExpense(expense: Expense) {
+    fun createExpense(expense: Expense): Long {
         val db = this.writableDatabase
 
-        val payerId = getUserIdByUsername(expense.payer.username) // Get userId based on username
+        val payerId = getUserIdByUsername(expense.payer.username) // Corrected to use username field
         payerId?.let { id ->
             val values = ContentValues().apply {
                 put("amount", expense.amount)
                 put("description", expense.description)
-                put("payerId", id)
-                put("groupId", expense.groupId)
+                put("payerId", expense.payer.userID)
+                put("receiverId", expense.receiver) // Corrected column name
+                put("groupId", expense.groupId.toInt()) // Convert to Integer if necessary
                 put("date", expense.date)
             }
 
-            db.insert("Expenses", null, values)
+            val result = db.insert("Expenses", null, values)
+            if (result == -1L) {
+                Log.e("DatabaseError", "Failed to insert expense")
+            }
+            return result
         }
 
-        //   db.close()
+        Log.e("DatabaseError", "Payer ID not found")
+        return -1
     }
 
     fun getTotalAmountPaidByUserInGroup(userId: Int, groupId: String): Double {

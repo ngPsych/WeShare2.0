@@ -163,18 +163,21 @@ class GroupActivity : AppCompatActivity() {
             }
 
             val expense = payer?.let {
-                Expense(
-                    amount = amount,
-                    description = description,
-                    payer = it,
-                    receiver = session.getUserId(),
-                    groupId = groupID.toString(),
-                    date = date
-                )
+                if (it.userID != null) {
+                    Expense(
+                        amount = amount,
+                        description = description,
+                        payer = it,
+                        receiver = session.getUserId(), // userID is now guaranteed to be non-null
+                        groupId = groupID.toString(),
+                        date = date
+                    )
+                } else {
+                    null // Return null if userID is null
+                }
             }
 
             if (expense != null) {
-
                 db.sendExpenseNotification(expense)
                 db.createExpense(expense)
             }

@@ -41,18 +41,16 @@ class NotificationActivity : AppCompatActivity(), NotificationActionListener {
     }
 
     override fun onAccept(notification: Notification, position: Int) {
-        // Now you have the position, you can retrieve the notification directly
-        db.addUserToGroup(UserGroup(notification.userID, notification.groupID))
-        db.deleteNotification(notification.userID, notification.groupID, notification.message)
-        // You may want to remove the notification from the list and update the adapter
+
         notificationList.removeAt(position)
         adapter.notifyDataSetChanged()
     }
 
     override fun onDecline(notification: Notification, position: Int) {
-        // Handle decline action
-        db.deleteNotification(notification.userID, notification.groupID, notification.message)
-        // Remove the notification from the list and update the adapter
+
+        // user should be able to decline it.
+
+
         notificationList.removeAt(position)
         adapter.notifyDataSetChanged()
     }

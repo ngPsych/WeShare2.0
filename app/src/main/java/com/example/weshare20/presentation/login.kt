@@ -36,9 +36,10 @@ class LoginActivity : AppCompatActivity() {
                 println("email already exist")
             }
             else -> {
-                db.createUser(User("Jens Jensen", "rr", "1234", 80808080, "jens@jensen.com"))
-                db.createUser(User("Christian Christiansen", "gg", "1234", 22, "hej@hejsen.com"))
-                db.createUser(User("bigman benson", "bb", "bb", 11, "bb@besen.com"))
+                db.createUser(User(fullname = "Jens Jensen", username = "rr", password = "1234", phoneNumber = 80808080, email = "jens@jensen.com"))
+                db.createUser(User(fullname = "Christian Christiansen", username = "gg", password = "1234", phoneNumber = 22, email = "hej@hejsen.com"))
+                db.createUser(User(fullname = "bigman benson", username = "bb", password = "bb", phoneNumber = 11, email = "bb@besen.com"))
+
 
             }
         }
