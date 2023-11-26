@@ -407,8 +407,8 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
         val message = "Expense Alert: ${expense.description} of \$${expense.amount} paid by ${expense.payer.username} to user with ID ${expense.receiver} in group ${expense.groupId} on ${expense.date}."
 
         val values = ContentValues().apply {
-            put("userID", expense.receiver) // Assuming receiver is the userID who should be notified
-            put("groupID", expense.groupId.toInt()) // Convert to Int if groupId is a String
+            put("userID", expense.receiver)
+            put("groupID", expense.groupId.toInt())
             put("message", message)
         }
 
@@ -484,8 +484,8 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
                 put("amount", expense.amount)
                 put("description", expense.description)
                 put("payerId", expense.payer.userID)
-                put("receiverId", expense.receiver) // Corrected column name
-                put("groupId", expense.groupId.toInt()) // Convert to Integer if necessary
+                put("receiverId", expense.receiver)
+                put("groupId", expense.groupId.toInt())
                 put("date", expense.date)
             }
 
@@ -529,20 +529,6 @@ class DatabaseHandler(context : Context) : SQLiteOpenHelper(context, "WeShare2.0
     }
 
 
-    /* Example of handling an accepted invite
-    fun onInviteAccepted(notification: Notification) {
-        addUserToGroup(UserGroup(notification.userID, notification.groupID))
-        updateNotificationStatus(notification.notificationID, "ACCEPTED")
-    }
-     */
-
-    /* NOTE
-    Nu har vi funktion til at tilføje person i gruppe og notification. Vi skal somehow gøre sådan at
-    når man inviterer en person til en gruppe, så sender den notifikationen først, og så når status
-    bliver til "ACCEPTED", altså at personen har accepteret, så skal den opdatere og tilføje
-    personen til gruppen.
-
-     */
     fun deleteDatabase(context: Context) {
         context.deleteDatabase("WeShare2.0_Database")
     }

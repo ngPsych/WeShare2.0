@@ -6,5 +6,5 @@ data class Expense(
     val payer: User,
     val receiver: Int,
     val groupId: String,
-    val date: String, // Consider using a Date type
+    val date: String, 
 )

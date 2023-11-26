@@ -7,7 +7,6 @@
     tools:context="com.example.weshare20.presentation.SignUpActivity">
 
 
-    <!-- Header -->
     <LinearLayout
         android:id="@+id/headerLayout"
         android:layout_width="wrap_content"
@@ -36,12 +35,10 @@
             android:layout_weight="1"
             android:text="LOG OUT" />
 
-        <!-- Add other header elements as needed -->
 
     </LinearLayout>
 
 
-    <!-- File List -->
     <ListView
         android:id="@+id/groupListView"
         android:layout_width="match_parent"
@@ -51,7 +48,6 @@
         android:divider="@android:color/darker_gray"
         android:dividerHeight="10dp"/>
 
-    <!-- Floating Action Button for adding new files -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addGroupButton"
         android:layout_width="wrap_content"

@@ -41,9 +41,7 @@ class Profile : AppCompatActivity() {
                 profileEmail.hint = email
 
                 profileUpdateButton.setOnClickListener {
-                    // Check and update phone number
 
-                   // if (profilePhoneNumber.hint.toString() != profilePhoneNumber.text.toString()) {
                     if (profilePhoneNumber.text.isNotEmpty()) {
                         val newPhoneNumber = profilePhoneNumber.text.toString().toInt()
                         if (user.phoneNumber != newPhoneNumber && !db.isPhoneNumberExist(newPhoneNumber)) {
@@ -58,7 +56,6 @@ class Profile : AppCompatActivity() {
 
                     // Check and update email
                     val newEmail = profileEmail.text.toString()
-                   // if (profileEmail.hint != profileEmail.text) {
                     if (profileEmail.text.isNotEmpty()) {
                         if (user.email != newEmail && !db.isEmailExist(newEmail)) {
                             db.updateUserEmail(userId, newEmail)
@@ -70,7 +67,6 @@ class Profile : AppCompatActivity() {
                         println("EMAIL: Empty")
                     }
 
-                    // Check and update password
                     val newPassword = profilePassword.text.toString()
                     val confirmPassword = profileConfirmPassword.text.toString()
                     if (newPassword.isNotEmpty()) {
@@ -88,10 +84,8 @@ class Profile : AppCompatActivity() {
 
                 profileNotificationSwitch.setOnCheckedChangeListener { _, isChecked ->
                     if (isChecked) {
-                        // The switch is on
                         Toast.makeText(this, "NOTIFICATION ON", Toast.LENGTH_LONG).show()
                     } else {
-                        // The switch is off
                         Toast.makeText(this, "NOTIFICATION OFF", Toast.LENGTH_LONG).show()
                     }
                 }

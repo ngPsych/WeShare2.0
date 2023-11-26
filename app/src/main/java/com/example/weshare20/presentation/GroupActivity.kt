@@ -59,7 +59,7 @@ class GroupActivity : AppCompatActivity() {
 
         val backButton: Button = findViewById(R.id.backToHomeButton)
         backButton.setOnClickListener {
-            val intent = Intent(this, Home::class.java) // Replace YourTargetActivity with the actual class name of your target activity
+            val intent = Intent(this, Home::class.java)
             startActivity(intent)
         }
 
@@ -72,9 +72,7 @@ class GroupActivity : AppCompatActivity() {
                 val groupID = db.getCurrentGroupID(groupName.toString(), groupDescription.toString())
 
 
-                // Create a UserGroup object
                 val userGroup = UserGroup(userID, groupID)
-                // Add user to group
                 db.addUserToGroup(userGroup)
 
                 // Show confirmation
@@ -93,8 +91,7 @@ class GroupActivity : AppCompatActivity() {
 
     private fun showAddExpenseDialog() {
 
-        // Define payer and groupId here. These should be determined based on your app's flow.
-        // For demonstration, I am setting them to default values. Replace with your logic.
+
         val groupName = intent.getStringExtra("GROUP_NAME")
         val groupDescription = intent.getStringExtra("GROUP_DESCRIPTION")
         val groupID = db.getCurrentGroupID(groupName.toString(), groupDescription.toString())
@@ -104,7 +101,6 @@ class GroupActivity : AppCompatActivity() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_expense, null)
         val editTextAmount = dialogView.findViewById<EditText>(R.id.editTextAmount)
         val editTextDescription = dialogView.findViewById<EditText>(R.id.editTextDescription)
-        // Initialize other input fields similarly
 
         val payerSpinner = dialogView.findViewById<Spinner>(R.id.payerSpinner)
         val editTextDate = dialogView.findViewById<EditText>(R.id.editTextDate)
@@ -125,27 +121,21 @@ class GroupActivity : AppCompatActivity() {
             }
         }
 
-// Create a map from full names to User objects
         val fullNameToUserMap = userList.associateBy { it.fullname }
 
-// Use the keys from the map (the full names) for the adapter
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, fullNameToUserMap.keys.toList())
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         payerSpinner.adapter = adapter
 
-        var payer: User? = null // Initialize payer as nullable User
+        var payer: User? = null
 
         payerSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                // Get the selected item, which is the full name
                 val selectedFullName = parent?.getItemAtPosition(position) as? String
-                // Retrieve the User object from the map using the selected full name
                 payer = selectedFullName?.let { fullNameToUserMap[it] }
-                // Now payer will have the User object with username, fullname, etc.
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Handle no item selected
             }
         }
 
@@ -154,7 +144,6 @@ class GroupActivity : AppCompatActivity() {
             val description = editTextDescription.text.toString()
 
 
-            // Retrieve data from other fields
             val date = editTextDate.text.toString()
 
             if (amount <= 0 || description.isBlank() || date.isBlank()) {
@@ -168,12 +157,12 @@ class GroupActivity : AppCompatActivity() {
                         amount = amount,
                         description = description,
                         payer = it,
-                        receiver = session.getUserId(), // userID is now guaranteed to be non-null
+                        receiver = session.getUserId(),
                         groupId = groupID.toString(),
                         date = date
                     )
                 } else {
-                    null // Return null if userID is null
+                    null
                 }
             }
 

@@ -19,7 +19,6 @@
         android:layout_height="wrap_content"
         android:hint="Description"/>
 
-    <!-- Payer -->
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
@@ -34,7 +33,6 @@
         android:prompt="@string/Payer"/>
 
 
-    <!-- Date -->
     <EditText
         android:id="@+id/editTextDate"
         android:layout_width="match_parent"

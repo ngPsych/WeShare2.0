@@ -28,7 +28,7 @@ class Home : AppCompatActivity() {
         val addGroupButton: FloatingActionButton = findViewById(R.id.addGroupButton)
 
         val groupListView: ListView = findViewById(R.id.groupListView)
-        val groups = db.getUserGroups(userId) // get your list of groups from the database
+        val groups = db.getUserGroups(userId)
         val adapter = GroupAdapter(this, groups)
         groupListView.adapter = adapter
 
@@ -48,9 +48,7 @@ class Home : AppCompatActivity() {
 
                 groupListView.setOnItemClickListener { parent, view, position, id ->
                     val group = adapter.getItem(position)
-                    // Now you have access to group.name and group.description without using tags
 
-                    // Intent to start a new activity, passing group details
                     val intent = Intent(this, GroupActivity::class.java).apply {
                         putExtra("GROUP_NAME", group?.name)
                         putExtra("GROUP_DESCRIPTION", group?.description)
@@ -75,7 +73,6 @@ class Home : AppCompatActivity() {
                 }
             }
         } else {
-            // For something if the user is not logged in, might not be necessary
         }
 
     }

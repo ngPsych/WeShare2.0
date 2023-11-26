@@ -25,7 +25,6 @@ class SignUpActivity : AppCompatActivity() {
         val db = DatabaseHandler(this)
 
         btnSignUp.setOnClickListener {
-            // Logic for inserting into database
             val fullName = editTextFullname.text.toString()
             val username = editTextUsername.text.toString()
             val password = editTextPassword.text.toString()

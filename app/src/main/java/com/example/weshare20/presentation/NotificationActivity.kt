@@ -15,7 +15,7 @@ import com.example.weshare20.interfaces.NotificationActionListener
 
 class NotificationActivity : AppCompatActivity(), NotificationActionListener {
 
-    private lateinit var notificationList: MutableList<Notification> // Declare as MutableList
+    private lateinit var notificationList: MutableList<Notification>
     private lateinit var adapter: NotificationAdapter
     private lateinit var db: DatabaseHandler
     private lateinit var session: SessionManager
@@ -26,7 +26,7 @@ class NotificationActivity : AppCompatActivity(), NotificationActionListener {
 
         db = DatabaseHandler(this)
         session = SessionManager(this)
-        val notifications = db.getUserNotifications(session.getUserId()) // get your list of notifications
+        val notifications = db.getUserNotifications(session.getUserId())
         notificationList = notifications.toMutableList()
         adapter = NotificationAdapter(this, notificationList, this)
 
@@ -48,7 +48,6 @@ class NotificationActivity : AppCompatActivity(), NotificationActionListener {
 
     override fun onDecline(notification: Notification, position: Int) {
 
-        // user should be able to decline it.
 
 
         notificationList.removeAt(position)
