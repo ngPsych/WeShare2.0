@@ -1,7 +1,7 @@
 package com.example.weshare20.presentation
 
+import android.R
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,17 +9,18 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.example.weshare20.R
 import com.example.weshare20.business.DatabaseHandler
 import com.example.weshare20.business.Expense
 import com.example.weshare20.business.SessionManager
 import com.example.weshare20.business.User
 import com.example.weshare20.business.UserGroup
+
 
 class GroupActivity : AppCompatActivity() {
     private lateinit var db: DatabaseHandler
@@ -30,6 +31,7 @@ class GroupActivity : AppCompatActivity() {
 
         db = DatabaseHandler(this)
         session = SessionManager(this)
+        createNotificationChannel()
 
         val groupName = intent.getStringExtra("GROUP_NAME")
         val groupDescription = intent.getStringExtra("GROUP_DESCRIPTION")
@@ -77,6 +79,19 @@ class GroupActivity : AppCompatActivity() {
 
                 // Show confirmation
                 Toast.makeText(this, "User added to Group", Toast.LENGTH_LONG).show()
+
+                var builder = NotificationCompat.Builder(this, 1)
+                    .setSmallIcon(R.drawable.notification_icon)
+                    .setContentTitle("WeShare2.0")
+                    .setContentText("Added to " + groupName.toString())
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+                with(NotificationManagerCompat.from(this)) {
+                    // notificationId is a unique int for each notification that you must define
+                    val notificationId = (System.currentTimeMillis() and 0xFFFFFFF).toInt()
+                    notify(notificationId, builder.build())
+                }
+
             } else {
                 Toast.makeText(this, "Please enter a Phone Number to add user!", Toast.LENGTH_LONG).show()
             }
@@ -169,9 +184,42 @@ class GroupActivity : AppCompatActivity() {
             if (expense != null) {
                 db.sendExpenseNotification(expense)
                 db.createExpense(expense)
+
+                val receiveAmount = db.getTotalAmountToBeReceivedByUserInGroup(
+                    session.getUserId(),
+                    db.getCurrentGroupID(groupName.toString(), groupDescription.toString()).toString()
+                ) ?: 0.0 // If null, default to 0.0
+
+                val debtAmount = db.getTotalAmountPaidByUserInGroup(
+                    session.getUserId(),
+                    db.getCurrentGroupID(groupName.toString(), groupDescription.toString()).toString()
+                ) ?: 0.0 // If null, default to 0.0
+
+                val receiveTextView: TextView = findViewById(R.id.receiveTextView)
+                receiveTextView.text = receiveAmount.toString()
+
+                val debtTextView: TextView = findViewById(R.id.debtTextView)
+                debtTextView.text = debtAmount.toString()
             }
             dialog.dismiss()
         }
 
+    }
+
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is not in the Support Library.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString("WeShare2.0")
+            val descriptionText = getString("WeShare2.0 Notification")
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(1, name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system.
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 }

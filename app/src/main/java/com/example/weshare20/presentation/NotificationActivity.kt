@@ -24,6 +24,7 @@ class NotificationActivity : AppCompatActivity(), NotificationActionListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notification)
 
+        createNotificationChannel()
         db = DatabaseHandler(this)
         session = SessionManager(this)
         val notifications = db.getUserNotifications(session.getUserId())
@@ -52,5 +53,22 @@ class NotificationActivity : AppCompatActivity(), NotificationActionListener {
 
         notificationList.removeAt(position)
         adapter.notifyDataSetChanged()
+    }
+
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is not in the Support Library.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString("WeShare2.0")
+            val descriptionText = getString("WeShare2.0 Notification")
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(1, name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system.
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 }
